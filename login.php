@@ -26,7 +26,7 @@ if (isset($_POST['signIn'])) {
               // Password is correct for admin
               $_SESSION['admin_id'] = $admin_account['admin_id']; // Store only the admin id in the session
               session_regenerate_id(true); // Regenerate session ID to prevent session fixation
-              header("Location: admin/admin_dashboard.php"); // Redirect to admin dashboard
+              header("Location: admin/index.php"); // Redirect to admin dashboard
               exit();
           } else {
               header("Location: signin.php?error=Invalid admin password.");
