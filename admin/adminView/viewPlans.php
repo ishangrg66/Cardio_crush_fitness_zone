@@ -34,21 +34,20 @@
         <td><button class="btn btn-primary" style="height:40px" onclick="updatePlan()">Update</button></td>
           <!-- eg end -->
 
-
-      <td><button class="btn btn-primary" style="height:40px" onclick="planUpdate('<?=$row['plans_id']?> ')">Edit</button></td>
-
-      
-      <td><button class="btn btn-danger" style="height:40px" onclick="planDelete('<?=$row['plans_id']?>')">Delete</button></td>
-    </tr>
-    <?php
+          
+          
+          
+          <td><button class="btn btn-danger" style="height:40px" onclick="planDelete('<?=$row['plans_id']?>')">Delete</button></td>
+        </tr>
+        <?php
             $count=$count+1;
            
         }
-    }
-    ?>
+      }
+      ?>
   </table>
-
-        <!-- Add New Plan Start -->
+  
+  <!-- Add New Plan Start -->
   
   <!-- Trigger the modal with a button -->
   <button type="button" class="btn btn-secondary" style="height:40px" data-toggle="modal" data-target="#myModal">
@@ -58,7 +57,7 @@
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-    
+      
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -92,18 +91,20 @@
               <label for="price">Plan_Price:</label>
               <input type="number" class="form-control" name="price" required>
             </div>
-
+            
             <div class="form-group">
               <button type="submit" class="btn btn-secondary" name="plan_submit" style="height:40px">Add Plan</button>
             </div>
           </form>
         <!-- Add New Plan End -->
-
-        </div>
-        <div class="modal-footer">
+        
+      </div>
+      <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal" style="height:40px">Close</button>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+    <!-- <td><button class="btn btn-primary" style="height:40px" onclick="planUpdate('<?=$row['plans_id']?> ')">Edit</button></td> -->

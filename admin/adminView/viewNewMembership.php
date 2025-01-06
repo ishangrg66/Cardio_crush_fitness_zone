@@ -6,29 +6,32 @@
   <table class="table">
     <thead>
       <tr>
-        <th class="text-center">Member_ID</th>
-        <th class="text-center">Member Name</th>
+        <!-- <th class="text-center">Member_ID</th> -->
+        <th class="text-center">Name</th>
         <th class="text-center">Email</th>
         <th class="text-center">Phone</th>
+        <th class="text-center">Birthdate</th>
+        <th class="text-center">Password</th>
         <th class="text-center" colspan="2">Action</th>
       </tr>
     </thead>
     <?php
       include_once "db.php";
       // have to change later
-      $sql="SELECT * from new_membership"; 
+      $sql="SELECT * from user_account"; 
       $result=$conn-> query($sql);
       $count=1;
       if ($result-> num_rows > 0){
         while ($row=$result-> fetch_assoc()) {
     ?>
     <tr>
-      <td><?=$row['member_id']?></td>
-      <td><?=$row["member_name"]?></td>
+      <td><?=$row["f_name"]?><?=$row["l_name"]?></td>
       <td><?=$row["email"]?></td>
-      <td><?=$row["contact"]?></td>
-      <td><button class="btn btn-primary" onclick="newMembershipUpdate('<?=$row['member_id']?> ')">Edit</button></td>
-      <td><button class="btn btn-danger" style="height:40px" onclick="newMembershipDelete('<?=$row['member_id']?>')">Delete</button></td>
+      <td><?=$row["phone"]?></td>
+      <td><?=$row["birthdate"]?></td>
+      <td><?=$row["password"]?></td>
+      <td><button class="btn btn-primary" onclick="newMembershipUpdate('<?=$row['id']?> ')">Edit</button></td>
+      <td><button class="btn btn-danger" style="height:40px" onclick="newMembershipDelete('<?=$row['id']?>')">Delete</button></td>
     </tr>
     <?php
             $count=$count+1;
@@ -43,7 +46,7 @@
 
    <!-- Trigger the modal with a button -->
  <button type="button" class="btn btn-secondary" style="height:40px" data-toggle="modal" data-target="#myModal">
-    Add New Membership
+    Add New User
   </button>
 
   <!-- Modal -->
@@ -60,13 +63,12 @@
           <form  enctype='multipart/form-data' action="./controller/addNewMembershipController.php" method="POST">
             <!-- 1 -->
             <div class="form-group">
-              <label for="member_id">Member_ID:</label>
-              <input type="number" class="form-control" name="member_id" required>
+              <label for="f_name">First Name:</label>
+              <input type="text" class="form-control" name="f_name" required>
             </div>
-            <!-- 2 -->
             <div class="form-group">
-              <label for="member_name">Member_Name:</label>
-              <input type="text" class="form-control" name="member_name" required>
+              <label for="l_name">Last Name:</label>
+              <input type="text" class="form-control" name="l_name" required>
             </div>
             <!-- 3 -->
             <div class="form-group">
@@ -77,6 +79,14 @@
             <div class="form-group">
               <label for="contact">Phone:</label>
               <input type="number" class="form-control" name="contact" required>
+            </div>
+            <div class="form-group">
+              <label for="birthdate">Birthdate:</label>
+              <input type="date" class="form-control" name="birthdate" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input type="password" class="form-control" name="password" required>
             </div>
             <div class="form-group">
               <button type="submit" class="btn btn-secondary" name="member_submit" style="height:40px">Add New Member</button>

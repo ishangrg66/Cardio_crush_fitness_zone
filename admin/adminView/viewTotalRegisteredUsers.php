@@ -23,7 +23,7 @@
         while ($row=$result-> fetch_assoc()) {
     ?>
     <tr>
-      <td><?=$row["id"]?></td>   
+    
       <td><?=$row["f_name"]?><?=$row["l_name"]?></td>   
       <td><?=$row["email"]?></td>   
       <td><?=$row["phone"]?></td>   

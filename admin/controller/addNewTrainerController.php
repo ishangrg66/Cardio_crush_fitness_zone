@@ -8,21 +8,18 @@
         $image_name = $_FILES['image']['name'];
         $image_tmp =$_FILES['image']['tmp_name'];
         move_uploaded_file($image_tmp,"images/".$image_name);
-
-
-
         $contact = $_POST['contact'];
         $address = $_POST['address'];
 
         $query = "INSERT INTO trainers
-        VALUES('$trainer_id', '$trainer_name', '$email', '$contact')";
+        VALUES('$trainer_id', '$trainer_name', '$image_name','$contact','$address')";
         $trainerInsert = mysqli_query($conn,$query);
  
          if($trainerInsert)
          {
             $message = "New trainer added sucessfully"; 
             echo "<script>alert('$message');</script>";
-            header("Location: ../index.php?trainer=success"); 
+            header("Location: adminView/viewTrainers.php?trainer=success"); 
          }
          else
          {
