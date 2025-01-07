@@ -199,9 +199,9 @@ if ($result->num_rows > 0) {
             <li class="nav__item">
               <a href="#trainer" class="nav__link">Trainers</a>
             </li>
-            <li class="nav__item">
+            <!-- <li class="nav__item">
               <a href="#choose" class="nav__link">Choose Us</a>
-            </li>
+            </li> -->
             <li class="nav__item">
               <a href="#pricing" class="nav__link">Pricing</a>
             </li>

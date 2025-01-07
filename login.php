@@ -11,29 +11,6 @@ if (isset($_POST['signIn'])) {
         exit;
     }
 
-    // First, check if the email exists in the admins table
-    $check_admin_query = "SELECT * FROM admins WHERE email = ?";
-    $stmt = $conn->prepare($check_admin_query);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-          // Admin account found, verify the password (plain text)
-          $admin_account = $result->fetch_assoc();
-
-          if ($password === $admin_account['password']) { // Plain text comparison
-              // Password is correct for admin
-              $_SESSION['admin_id'] = $admin_account['admin_id']; // Store only the admin id in the session
-              session_regenerate_id(true); // Regenerate session ID to prevent session fixation
-              header("Location: admin/index.php"); // Redirect to admin dashboard
-              exit();
-          } else {
-              header("Location: signin.php?error=Invalid admin password.");
-              exit();
-          }
-    } else {
-        // Admin not found, check the user_account table
         $check_user_query = "SELECT * FROM user_account WHERE email = ?";
         $stmt = $conn->prepare($check_user_query);
         $stmt->bind_param("s", $email);
@@ -60,7 +37,7 @@ if (isset($_POST['signIn'])) {
             exit();
         }
     }
-} else {
+ else {
     echo "Invalid request.";
     exit();
 }

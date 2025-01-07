@@ -76,185 +76,341 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Styling-->
+    <!-- <link rel="stylesheet" href="css/style.css" /> -->
+
+    <!-- FavIcon -->
+    <link rel="shortcut icon" href="image/workout (1).png" />
+
+    <!-- RemixIcon -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+    />
+    <link rel="stylesheet" href="./css/Timetable.css" />
     <title>My Profile</title>
     <!-- <link rel="stylesheet" href="styles.css"> -->
     <style>
-/* General Reset and Layout */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color:rgb(27, 29, 30);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
+        .profile-container {
+            background:rgb(74, 70, 70);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: rgb(255, 255, 255);
+            font-size: 26px;
+            text-align: center;
+            border-bottom: 2px solid hsl(32, 93%, 65%);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        p {
+            font-size: 20px;
+            margin: 10px 0;
+            color: hsl(17, 92%, 74%);
+        }
+
+        strong {
+            color: white;
+        }
+
+        form {
+            margin-top: 15px;
+        }
+
+        .editable {
+            display: none;
+            width: 40%;
+            align-items: center
+            margin-top: 5px;
+            padding: 8px;
+            font-size: 14px;
+            /* border: 1px solid #ccc; */
+            /* border-radius: 5px; */
+            outline: none;
+            transition: border 0.3s ease;
+        }
+
+        /* .editable:focus {
+            border: 1px solid #00bcd4;
+        } */
+
+        button {
+            background-color: hsl(0, 95%, 50%);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #008c9e;
+        }
+
+        button[type="button"] {
+            background-color:rgb(247, 29, 29);
+            color: #333;
+            text: bold;
+            border: 1px solid rgb(247, 29, 29);
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        button[type="button"]:hover {
+            background-color: transparent;
+            border: 1px solid hsl(32, 93%, 65%); 
+            color: white;
+        }
+
+        button[type="submit"] {
+            display: none;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        #phoneError, #birthdateError {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Current Membership Section */
+        .current-membership {
+            margin-top: 30px;
+        }
+
+        .current-membership p {
+            font-size: 16px;
+        }
+
+/* Navigation Bar Styles */
+/* General Styling
 body {
+    margin: 0;
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+    background-color: #f4f7f9;
+} */
 
-.profile-container {
+.header {
     width: 100%;
-    max-width: 600px; /* Set a max-width for the form */
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 20px;
+    background-color:transparent;
+    position: fixed;
+    padding: 15px 0;
+    top: 0px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 15px;
-    text-align: center;
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav__logo {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 20px;
+    text-decoration: none;
     font-weight: bold;
 }
 
-.user-details,
-.current-membership {
-    margin-bottom: 20px;
+.nav__logo img {
+    width: 40px;
+    margin-right: 10px;
 }
 
-.user-details p,
-.current-membership p {
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 8px;
+.nav__menu {
+    display: flex;
+    align-items: center;
 }
 
-strong {
-    color: #2c3e50;
+.nav__list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-/* Editable Fields Styling */
-.editable {
-    display: none;
+.nav__item {
+    margin: 0 20px;
 }
 
-input[type="text"],
-input[type="date"] {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-top: 8px;
-    margin-bottom: 12px;
-}
-
-input[type="text"]:focus,
-input[type="date"]:focus {
-    border-color: #3498db;
-    outline: none;
-}
-
-/* Edit Button Styling */
-button[type="button"] {
-    background-color: #3498db;
+.nav__link {
     color: #fff;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    text-decoration: none;
     font-size: 16px;
-    margin-top: 5px;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
-button[type="button"]:hover {
-    background-color: #2980b9;
+.nav__link:hover,
+.nav__link.active-link {
+    background-color: #008c9e;
 }
 
-button[type="submit"] {
-    background-color: #27ae60;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
+.nav__toggle {
     display: none;
-    margin-top: 12px;
+    font-size: 30px;
+    color: #fff;
+    cursor: pointer;
 }
 
-button[type="submit"]:hover {
-    background-color: #2ecc71;
+.nav__close {
+    display: none;
 }
 
-button[type="submit"]:active {
-    background-color: #27ae60;
+/* Mobile View */
+@media (max-width: 768px) {
+    .nav__menu {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        height: 100%;
+        background-color: #00bcd4;
+        width: 250px;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px;
+        transition: 0.3s ease;
+    }
+
+    .nav__menu.active {
+        left: 0;
+    }
+
+    .nav__list {
+        flex-direction: column;
+        margin-top: 50px;
+    }
+
+    .nav__item {
+        margin: 15px 0;
+    }
+
+    .nav__toggle {
+        display: block;
+    }
+
+    .nav__close {
+        position: absolute;
+        display: block;
+        top:0.5rem;
+        right:1.5rem;
+        font-size: 30px;
+        color: hsl(0, 95%, 50%);
+        cursor: pointer;
+    }
 }
 
-/* Form Container Styling */
-form {
-    margin-top: 20px;
-}
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .profile-container {
+                width: 100%;
+                padding: 15px;
+            }
 
-form div {
-    margin-bottom: 20px;
-}
+            h2 {
+                font-size: 20px;
+            }
 
-form div:last-child {
-    margin-bottom: 0;
-}
-
-/* Profile Section Styling */
-.profile-container h2 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 20px;
-}
-
-.profile-container .user-details p,
-.profile-container .current-membership p {
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 12px;
-}
-
-/* Error Message Styling */
-p[style="color:red;"] {
-    color: red;
-    font-size: 14px;
-    margin-top: 10px;
-    text-align: center;
-}
-
+            p {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
-    
+ <!--------------- Header ----------------------->
+
+ <div class="header" id="header">
+      <nav class="nav container">
+        <a href="#" class="nav__logo">
+          <img src="image/workout (1).png" alt="logo" />
+          𝐂𝐚𝐫𝐝𝐢𝐨 𝐂𝐫𝐮𝐬𝐡
+        </a>
+
+        <div class="nav__menu" id="nav-menu">
+          <ul class="nav__list">
+            <li class="nav__item">
+              <a href="home.php" class="nav__link ">Home</a>
+            </li>
+            <li class="nav__item">
+              <a href="profile.php" class="nav__link active-link">My Profile</a>
+            </li>
+            <li class="nav__item">
+              <a href="logout.php" class="nav__link">Logout</a>
+            </li>
+          </ul>
+          <div class="nav__close" id="nav-close">
+            <i class="ri-close-line"></i>
+          </div>
+        </div>
+        <!-- Toggle button -->
+        <div class="nav__toggle" id="nav-toggle">
+          <i class="ri-menu-fill"></i>
+        </div>
+      </nav>
+    </div>
     <div class="profile-container">
         <!-- User Details Section -->
         <div class="user-details">
             <h2>User Details</h2>
             <p><strong>Name:</strong> <?php echo htmlspecialchars($user['f_name'] . " " . $user['l_name']); ?></p>
             <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
-            
+
             <!-- Phone and Birthdate Fields with Edit Button -->
-            <form method="POST" action="profile.php">
+            <form method="POST" action="profile.php" onsubmit="return validateForm()">
                 <div>
-                    <strong>Phone:</strong> 
+                    <strong>Phone:</strong>
                     <span id="phoneDisplay"><?php echo htmlspecialchars($user['phone']); ?></span>
                     <input type="text" id="phoneInput" class="editable" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>" required>
                     <button type="button" onclick="editField('phone')">Edit</button>
                 </div>
+                <p id="phoneError">Phone number must start with 96, 97, or 98 and be 10 digits long.</p>
+
                 <div>
-                    <strong>Birthdate:</strong> 
+                    <strong>Birthdate:</strong>
                     <span id="birthdateDisplay"><?php echo htmlspecialchars($user['birthdate']); ?></span>
                     <input type="date" id="birthdateInput" class="editable" name="birthdate" value="<?php echo htmlspecialchars($user['birthdate']); ?>" required>
                     <button type="button" onclick="editField('birthdate')">Edit</button>
                 </div>
-                <!-- Save Changes -->
-                <button type="submit" name="update" class="editable">Save Changes</button>
-            </form>
+                <p id="birthdateError">Birthdate must be at least 10 years in the past.</p>
 
-            <!-- Error Message -->
-            <?php if (isset($error_message)): ?>
-                <p style="color:red;"><?php echo $error_message; ?></p>
-            <?php endif; ?>
+                <!-- Save Changes -->
+                <button type="submit" id="saveChanges" name="update">Save Changes</button>
+            </form>
         </div>
 
         <!-- Current Membership Section -->
@@ -262,10 +418,7 @@ p[style="color:red;"] {
             <h2>Current Membership</h2>
             <?php if ($current_membership): ?>
                 <?php
-                // Assuming $current_membership['plans_id'] contains the plans_id from the current membership
                 $plans_id = $current_membership['plans_id'];
-
-                // Query to fetch the plan name from the plans table
                 $query = $conn->prepare("SELECT plan_name FROM plans WHERE plans_id = ?");
                 $query->bind_param("i", $plans_id);
                 $query->execute();
@@ -273,8 +426,7 @@ p[style="color:red;"] {
                 $query->fetch();
                 $query->close();
                 ?>
-
-                <p><strong>Plan Name:</strong> <?php echo htmlspecialchars($plan_name); ?></p>               
+                <p><strong>Plan Name:</strong> <?php echo htmlspecialchars($plan_name); ?></p>
                 <p><strong>Start Date:</strong> <?php echo htmlspecialchars($current_membership['start_date']); ?></p>
                 <p><strong>End Date:</strong> <?php echo htmlspecialchars($current_membership['end_date']); ?></p>
                 <p><strong>Status:</strong> <?php echo $membership_status; ?></p>
@@ -285,20 +437,60 @@ p[style="color:red;"] {
     </div>
 
     <script>
-        // Function to toggle the editable fields
         function editField(field) {
             const displayElement = document.getElementById(field + 'Display');
             const inputElement = document.getElementById(field + 'Input');
-            const buttonElement = inputElement.nextElementSibling;
-            const saveButton = document.querySelector('button[type="submit"]');
+            const saveButton = document.getElementById('saveChanges');
 
-            if (inputElement.classList.contains('editable')) {
-                displayElement.style.display = 'none';
-                inputElement.style.display = 'inline-block';
-                buttonElement.style.display = 'inline-block';
-                saveButton.style.display = 'inline-block';
-            }
+            displayElement.style.display = 'none';
+            inputElement.style.display = 'inline-block';
+            saveButton.style.display = 'block'; // Show save changes button when any field is edited
         }
+
+        function validateForm() {
+            // Phone Validation
+            const phoneInput = document.getElementById('phoneInput');
+            const phoneError = document.getElementById('phoneError');
+            const phoneRegex = /^(96|97|98)\d{8}$/;
+
+            if (!phoneRegex.test(phoneInput.value)) {
+                phoneError.style.display = 'block';
+                return false;
+            } else {
+                phoneError.style.display = 'none';
+            }
+
+            // Birthdate Validation
+            const birthdateInput = document.getElementById('birthdateInput');
+            const birthdateError = document.getElementById('birthdateError');
+            const selectedDate = new Date(birthdateInput.value);
+            const today = new Date();
+            const tenYearsAgo = new Date(today.getFullYear() - 10, today.getMonth(), today.getDate());
+
+            if (selectedDate > today || selectedDate > tenYearsAgo) {
+                birthdateError.style.display = 'block';
+                return false;
+            } else {
+                birthdateError.style.display = 'none';
+            }
+
+            return true;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const birthdateInput = document.getElementById('birthdateInput');
+            const today = new Date();
+            const maxDate = new Date(today.getFullYear() - 10, today.getMonth(), today.getDate());
+            birthdateInput.max = maxDate.toISOString().split('T')[0];
+        });
+
+        document.getElementById('nav-toggle').addEventListener('click', function () {
+    document.getElementById('nav-menu').classList.add('active');
+});
+
+document.getElementById('nav-close').addEventListener('click', function () {
+    document.getElementById('nav-menu').classList.remove('active');
+});
     </script>
 </body>
 </html>

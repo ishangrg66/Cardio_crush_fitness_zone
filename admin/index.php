@@ -50,7 +50,7 @@
             <div class="col-sm-3">
                     <div class="card">
                             <i class="fa fa-th mb-2" style="font-size: 70px;"></i>
-                            <h4 style="color:white;">New Membership</h4>
+                            <h4 style="color:white;">Membership</h4>
                             <h5 style="color:white;">
                             <?php
                                

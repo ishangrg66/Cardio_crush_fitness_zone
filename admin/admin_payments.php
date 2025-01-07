@@ -4,9 +4,20 @@ session_start();
 
 // Check if the admin is logged in
 if ($_SESSION['role'] !== 'admin') {
-    header("Location: login.php");  // Redirect if not an admin
+    header("Location: ../login.php");  // Redirect if not an admin
     exit;
 }
+!
+<h2>Pending Payments</h2>
+<table>
+    <tr>
+        <th>User</th>
+        <th>Plan</th>
+        <th>Amount Paid</th>
+        <th>Payment Screenshot</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
 
 // Fetch all pending payments
 $payments_query = "SELECT p.payment_id, p.membership_id, m.id AS user_id, m.start_date, m.end_date, p.amount, p.payment_proof, p.status AS payment_status

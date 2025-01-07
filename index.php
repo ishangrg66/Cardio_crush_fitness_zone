@@ -41,7 +41,46 @@ if ($result->num_rows > 0) {
       href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
     />
     <link rel="stylesheet" href="./css/Timetable.css" />
-    
+    <style>
+      /* Container for dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown menu */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of links on hover */
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Show the dropdown menu when hovering over the button */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change the button background on hover */
+.dropdown:hover .dropdown-btn {
+    background-color: #3e8e41;
+}
+    </style>
     <title>Cardio Crush Fitness Zone</title>
   </head>
   <body>
@@ -74,8 +113,15 @@ if ($result->num_rows > 0) {
            
 <!-- Register Section (only visible when logged out) -->
 <div class="nav__link">
-    <a href="./signup.php" class="button nav__button">Register Now</a>
+    <div class="dropdown">
+        <button class="button nav__button dropdown-btn">Login</button>
+        <div class="dropdown-content">
+            <a href="admin/admin_signin.php">Admin</a>
+            <a href="./signin.php">User</a>
+        </div>
+    </div>
 </div>
+
 
 
 
@@ -324,10 +370,10 @@ if ($result->num_rows > 0) {
         </div>
         <div class="price__card">
           <div class="price__card__content">
-            <h3 id="plan-name-3" class="section__title-border"></h3>
-            <p id="plan-description-3"></p>
-            <h4><span id="plan-duration-3"></span> Month</h4>
-            <h3>Rs.<span id="price-3"></span></h3>
+            <h3 id="plan-name-2" class="section__title-border"></h3>
+            <p id="plan-description-2"></p>
+            <h4><span id="plan-duration-2"></span> Month</h4>
+            <h3>Rs.<span id="price-2"></span></h3>
             <p>
               <i class="ri-checkbox-circle-line"></i>
               Admission fee (Rs. 500)
@@ -352,10 +398,10 @@ if ($result->num_rows > 0) {
 
         <div class="price__card">
           <div class="price__card__content" >
-          <h3 id="plan-name-6" class="section__title-border"></h3>
-          <p id="plan-description-6"></p>
-            <h4><span id="plan-duration-6"></span> Month</h4>
-            <h3>Rs.<span id="price-6"></span></h3>
+          <h3 id="plan-name-3" class="section__title-border"></h3>
+          <p id="plan-description-3"></p>
+            <h4><span id="plan-duration-3"></span> Month</h4>
+            <h3>Rs.<span id="price-3"></span></h3>
             <p>
               <i class="ri-checkbox-circle-line"></i>
               Admission fee (Rs. 500)
@@ -383,10 +429,10 @@ if ($result->num_rows > 0) {
         </div>
         <div class="price__card">
           <div class="price__card__content">
-            <h3 id="plan-name-12" class="section__title-border"></h3>
-             <p id="plan-description-12"></p>
-            <h4><span id="plan-duration-12"></span> Month</h4>
-            <h3>Rs.<span id="price-12"></span></h3>
+            <h3 id="plan-name-4" class="section__title-border"></h3>
+             <p id="plan-description-4"></p>
+            <h4><span id="plan-duration-4"></span> Month</h4>
+            <h3>Rs.<span id="price-4"></span></h3>
             <p>
               <i class="ri-checkbox-circle-line"></i>
               Admission fee (Rs. 500)
@@ -555,5 +601,82 @@ if ($result->num_rows > 0) {
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <!-- ========Main JS=============-->
     <script src="js/main.js"></script>
+    <script>        
+// Trainers load
+async function fetchTrainers() {
+    try {
+        const response = await fetch('fetch_trainers.php');
+        console.log('Response:', response); // Debug: Check if the response is okay
+        if (!response.ok) {
+            throw new Error('Failed to fetch trainers: ' + response.statusText);
+        }
+        const trainers = await response.json();
+        console.log('Trainers data:', trainers); // Debug: Check the fetched data
+        const trainerGrid = document.getElementById('trainerGrid');
+
+        trainerGrid.innerHTML = ''; // Clear existing data
+
+        trainers.forEach(trainer => {
+            const card = document.createElement('div');
+            card.classList.add('trainer-card');
+            card.innerHTML = `
+                <img src="${trainer.image}" alt="${trainer.trainer_name}">
+                <h3>${trainer.trainer_name}</h3>
+            `;
+            trainerGrid.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Error fetching trainers:', error);
+    }
+}
+
+async function fetchPlans() {
+    try {
+        const response = await fetch('fetch_plans.php');
+        const data = await response.json();
+        console.log('Plans data:', data); // Debug: Check the fetched data
+        console.log('Response:', response); // Debug: Check if the response is okay
+        if (!response.ok) {
+            throw new Error('Failed to fetch plans: ' + response.statusText);
+        }
+
+        if (data.length === 0) {
+            console.error('No plans found in the database.');
+            return;
+        }
+
+        // Debugging: Check if price__grid exists
+        const priceGrid = document.querySelector('.price__grid');
+        if (!priceGrid) {
+            console.error('Price grid not found');
+            return;
+        }
+
+        // Update the DOM with pricing plan data
+        data.forEach((plan, index) => {
+            const planName = document.getElementById(`plan-name-${index + 1}`);
+            // const planDescription = document.getElementById(`plan-description-${index + 1}`);
+            const planDuration = document.getElementById(`plan-duration-${index + 1}`);
+            const planPrice = document.getElementById(`price-${index + 1}`);
+            
+            // Ensure the plan elements are found before setting
+            if (planName && planDuration && planPrice) {
+                planName.innerText = plan.plan_name;
+                // planDescription.innerText = plan.description;
+                planDuration.innerText = plan.duration;
+                planPrice.innerText = plan.price;
+            } else {
+                console.error(`Missing element for plan index ${index + 1}`);
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching plans:', error);
+    }
+}
+// Run the functions once the page is loaded
+document.addEventListener('DOMContentLoaded', function () {
+    fetchTrainers();
+    fetchPlans();
+});</script>
   </body>
 </html>

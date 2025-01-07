@@ -1,114 +1,81 @@
-
-<!-- all new members of user shown here who newly apply for gym membership or subscription -->
-
-<div >
-  <h2 class="text-center">New Membership Details</h2>
+<div>
+  <h2 class="text-center">New Membership Verification</h2>
   <table class="table">
     <thead>
       <tr>
-        <!-- <th class="text-center">Member_ID</th> -->
         <th class="text-center">Name</th>
-        <th class="text-center">Email</th>
-        <th class="text-center">Phone</th>
-        <th class="text-center">Birthdate</th>
-        <th class="text-center">Password</th>
+        <th class="text-center">Plan Name</th>
+        <th class="text-center">Start Date</th>
+        <th class="text-center">End Date</th>
+        <th class="text-center">Payment Status</th>
+        <th class="text-center">Payment Proof</th>
         <th class="text-center" colspan="2">Action</th>
       </tr>
     </thead>
     <?php
-      include_once "db.php";
-      // have to change later
-      $sql="SELECT * from user_account"; 
-      $result=$conn-> query($sql);
-      $count=1;
-      if ($result-> num_rows > 0){
-        while ($row=$result-> fetch_assoc()) {
+      include_once "db.php";  // Include your DB connection
+
+      // SQL query to fetch data from memberships, plans, and users
+      $sql = "
+        SELECT m.membership_id, u.f_name, u.l_name, p.plan_name, m.start_date, m.end_date, m.payment_status, m.payment_proof
+        FROM memberships m
+        JOIN user_account u ON m.id = u.id
+        JOIN plans p ON m.plans_id = p.plans_id
+      "; 
+      $result = $conn->query($sql);  // Execute the query
+
+      if ($result->num_rows > 0) {
+        // Loop through each row of the result
+        while ($row = $result->fetch_assoc()) {
     ?>
     <tr>
-      <td><?=$row["f_name"]?><?=$row["l_name"]?></td>
-      <td><?=$row["email"]?></td>
-      <td><?=$row["phone"]?></td>
-      <td><?=$row["birthdate"]?></td>
-      <td><?=$row["password"]?></td>
-      <td><button class="btn btn-primary" onclick="newMembershipUpdate('<?=$row['id']?> ')">Edit</button></td>
-      <td><button class="btn btn-danger" style="height:40px" onclick="newMembershipDelete('<?=$row['id']?>')">Delete</button></td>
+      <td><?= htmlspecialchars($row["f_name"]) . " " . htmlspecialchars($row["l_name"]) ?></td>
+      <td><?= htmlspecialchars($row["plan_name"]) ?></td>
+      <td><?= htmlspecialchars($row["start_date"]) ?></td>
+      <td><?= htmlspecialchars($row["end_date"]) ?></td>
+      <td><?= htmlspecialchars($row["payment_status"]) ?></td>
+      <td>
+        <?php if ($row["payment_proof"]): ?>
+          <img src="uploads/payment_proofs/<?= htmlspecialchars($row["payment_proof"]) ?>" alt="Payment Proof" width="100px" height="100px">
+        <?php else: ?>
+          No payment proof uploaded
+        <?php endif; ?>
+      </td>
+      <td>
+        <button class="btn btn-success" onclick="verifyMembership(<?= $row['membership_id'] ?>, 'accept')">Accept</button>
+      </td>
+      <td>
+        <button class="btn btn-danger" onclick="verifyMembership(<?= $row['membership_id'] ?>, 'reject')">Reject</button>
+      </td>
     </tr>
     <?php
-            $count=$count+1;
-           
         }
-    }
+      } else {
+        echo "<tr><td colspan='7' class='text-center'>No new memberships found.</td></tr>";
+      }
     ?>
-  </table>
-
-
-        <!-- Add New Membership Start -->
-
-   <!-- Trigger the modal with a button -->
- <button type="button" class="btn btn-secondary" style="height:40px" data-toggle="modal" data-target="#myModal">
-    Add New User
-  </button>
-
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">New Member Details</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <form  enctype='multipart/form-data' action="./controller/addNewMembershipController.php" method="POST">
-            <!-- 1 -->
-            <div class="form-group">
-              <label for="f_name">First Name:</label>
-              <input type="text" class="form-control" name="f_name" required>
-            </div>
-            <div class="form-group">
-              <label for="l_name">Last Name:</label>
-              <input type="text" class="form-control" name="l_name" required>
-            </div>
-            <!-- 3 -->
-            <div class="form-group">
-              <label for="email">Email:</label>
-              <input type="email" class="form-control" name="email" required>
-            </div>
-            <!-- 4 -->
-            <div class="form-group">
-              <label for="contact">Phone:</label>
-              <input type="number" class="form-control" name="contact" required>
-            </div>
-            <div class="form-group">
-              <label for="birthdate">Birthdate:</label>
-              <input type="date" class="form-control" name="birthdate" required>
-            </div>
-            <div class="form-group">
-              <label for="password">Password:</label>
-              <input type="password" class="form-control" name="password" required>
-            </div>
-            <div class="form-group">
-              <button type="submit" class="btn btn-secondary" name="member_submit" style="height:40px">Add New Member</button>
-            </div>
-          </form>
-        <!-- Add New Membership End -->
-
-        <!-- Update Membership Start -->
-
-
-        <!-- Update Membership End -->
-
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal" style="height:40px">Close</button>
-        </div>
-      </div>
-      
-    </div>
-  </div>
-
-  
+  </table>      
 </div>
-   
+
+<script>
+  // Function to handle membership acceptance or rejection
+  function verifyMembership(membership_id, action) {
+    const confirmation = confirm(`Are you sure you want to ${action} this membership?`);
+    if (confirmation) {
+      // Make an AJAX request to update the membership status
+      fetch(`verify_membership.php?membership_id=${membership_id}&action=${action}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert(`Membership has been ${action}ed successfully.`);
+            location.reload();  // Reload the page to reflect changes
+          } else {
+            alert('Error: Unable to process the request.');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+  }
+</script>

@@ -9,7 +9,7 @@
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
     <a href="./index.php" ><i class="fa fa-home"></i> Dashboard</a>
     <a href="#viewTotalRegisteredUsers.php"   onclick="showTotalRegisteredUsers()" ><i class="fa fa-th-large"></i> View Registration</a>
-    <a href="#viewNewMembership"   onclick="showNewMembership()" ><i class="fa fa-th"></i> New Membership</a>
+    <a href="#viewNewMembership"   onclick="showNewMembership()" ><i class="fa fa-th"></i> Membership</a>
     <a href="#viewTrainers" onclick="showTrainers()"><i class="fa fa-list"></i> Trainers</a>
     <a href="#viewPlans"  onclick="showPlans()" ><i class="fa fa-users"></i> Plans</a>
 

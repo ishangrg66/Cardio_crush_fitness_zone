@@ -8,7 +8,7 @@
 
 }
 :root{
-    --header-height: 3.5rem;
+    --header-height: 4.5rem;
 
     /* Colors :- Color made HSL(Hue, saturation, lightness*/
     /* hue- (0-360) 360 red 120 green 240 blue
@@ -187,8 +187,9 @@ img{
     width: 100%;
     background-color: transparent;
     position: fixed;
-    /* top: 0.5rem; */
+    top: 0.5rem;
     left: 0;
+    padding: 15px 0;
     z-index: var(--z-fixed);
 }
 .nav{
@@ -257,6 +258,7 @@ img{
     background-color: var(--title-color);
     border: none;
 }
+
 /* show menu */
 .show-menu{
     right: 0;
