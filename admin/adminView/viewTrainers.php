@@ -19,25 +19,36 @@
       if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
       ?>
-        <tr>
-          <td><?= htmlspecialchars($row["trainer_name"]) ?></td>
-          <td>
-            <img 
-              src="<?= htmlspecialchars($row["image"]) ?>" 
-              alt="Trainer Image" 
-              style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;"
-            >
-          </td>
-          <td><?= htmlspecialchars($row["phone_number"]) ?></td>
-          <td>
-            <button class="btn btn-primary" onclick="trainerUpdate('<?= $row['trainer_id'] ?>')">Edit</button>
-          </td>
-          <td>
-          <form action="controller/trainerDeleteController.php" method="POST">
+       <tr>
+    <td>
+        <?= htmlspecialchars($row["trainer_name"]) ?>
+    </td>
+    <td>
+    <?php if (!empty($row["image"])): ?>
+        <img 
+            src="<?= htmlspecialchars($row["image"]) ?>" 
+            style="width: 100px; height: 150px; border-radius: 5px;"
+        >
+    <?php else: ?>
+        <p>No Image Available</p>
+    <?php endif; ?>
+</td>
+
+    <td><?= htmlspecialchars($row["phone_number"]) ?></td>
+    <td>
+       <!-- Button to trigger edit modal -->
+<button type="button" class="btn btn-success" onclick="openEditModal('<?= $row['trainer_id'] ?>', '<?= htmlspecialchars($row['trainer_name']) ?>', '<?= htmlspecialchars($row['phone_number']) ?>', '<?= htmlspecialchars($row['image']) ?>', '<?= htmlspecialchars($row['address']) ?>')">
+    Edit
+</button>
+    </td>
+    <td>
+        <form action="controller/trainerDeleteController.php" method="POST">
             <input type="hidden" name="trainer_id" value="<?= $row['trainer_id'] ?>">
             <button type="submit" class="btn btn-danger">Delete</button>
-        </form>          </td>
-        </tr>
+        </form>
+    </td>
+</tr>
+
       <?php
         }
       } else {
@@ -90,6 +101,48 @@
                         <textarea name="address" id="address" class="form-control" placeholder="Enter Address" rows="4" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary mt-3">Add Trainer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Trainer Modal Structure -->
+<div class="modal fade" id="editTrainerModal" tabindex="-1" role="dialog" aria-labelledby="editTrainerLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editTrainerLabel">Edit Trainer Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="controller/edit_trainer.php" method="POST" enctype="multipart/form-data" onsubmit="return validateEditForm()">
+                    <input type="hidden" name="trainer_id" id="edit_trainer_id">
+
+                    <div class="form-group">
+                        <label for="edit_trainer_name">Trainer Name</label>
+                        <input type="text" name="trainer_name" id="edit_trainer_name" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_image">Image</label>
+                        <input type="file" name="image" id="edit_image" class="form-control-file" accept="image/*">
+                        <small>Leave blank to keep the current image</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_phone_number">Phone Number</label>
+                        <input type="text" name="phone_number" id="edit_phone_number" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_address">Address</label>
+                        <textarea name="address" id="edit_address" class="form-control" rows="4" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success mt-3">Save Changes</button>
                 </form>
             </div>
         </div>
@@ -201,4 +254,31 @@
     }
 }
 
+function openEditModal(id, name, phone, image, address) {
+    document.getElementById('edit_trainer_id').value = id;
+    document.getElementById('edit_trainer_name').value = name;
+    document.getElementById('edit_phone_number').value = phone;
+    document.getElementById('edit_address').value = address;
+
+    $('#editTrainerModal').modal('show');
+}
+
+function validateEditForm() {
+    const name = document.getElementById('edit_trainer_name').value.trim();
+    const phone = document.getElementById('edit_phone_number').value.trim();
+    const address = document.getElementById('edit_address').value.trim();
+
+    if (name === '' || phone === '' || address === '') {
+        alert('All fields are required!');
+        return false;
+    }
+
+    const phonePattern = /^(96|97|98)[0-9]{8}$/;
+    if (!phonePattern.test(phone)) {
+        alert('Please enter a valid phone number with 10 digits.');
+        return false;
+    }
+
+    return true;
+}
 </script>

@@ -11,33 +11,34 @@ if (isset($_POST['signIn'])) {
         exit;
     }
 
-        $check_user_query = "SELECT * FROM user_account WHERE email = ?";
-        $stmt = $conn->prepare($check_user_query);
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    $check_user_query = "SELECT * FROM user_account WHERE email = ?";
+    $stmt = $conn->prepare($check_user_query);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-        if ($result->num_rows > 0) {
-            // User account found, verify the password
-            $user_account = $result->fetch_assoc();
+    if ($result->num_rows > 0) {
+        // User account found, verify the password
+        $user_account = $result->fetch_assoc();
 
-            if (password_verify($password, $user_account['password'])) {
-                // Password is correct for user
-                $_SESSION['id'] = $user_account['id']; // Store only the user id in the session
-                session_regenerate_id(true); // Regenerate session ID to prevent session fixation
-                header("Location: home.php"); // Redirect to user homepage
-                exit();
-            } else {
-                header("Location: signin.php?error=Invalid user password.");
-                exit();
-            }
+        if (password_verify($password, $user_account['password'])) {
+            // Password is correct for user
+            $_SESSION['id'] = $user_account['id']; // Store only the user id in the session
+            session_regenerate_id(true); // Regenerate session ID to prevent session fixation
+            header("Location: home.php"); // Redirect to user homepage
+            exit();
         } else {
-            // No account found with that email
-            header("Location: signin.php?error=Invalid email or password.");
+            error_log("Password verification failed for email: $email");
+            header("Location: signin.php?error=Invalid user password.");
             exit();
         }
+    } else {
+        // No account found with that email
+        error_log("No account found for email: $email");
+        header("Location: signin.php?error=Invalid email or password.");
+        exit();
     }
- else {
+} else {
     echo "Invalid request.";
     exit();
 }

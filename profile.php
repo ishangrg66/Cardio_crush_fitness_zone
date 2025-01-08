@@ -27,24 +27,29 @@ $membership_stmt->execute();
 $membership_result = $membership_stmt->get_result();
 $current_membership = $membership_result->fetch_assoc();
 
-// Calculate membership status (active, expired, or pending)
+// Calculate membership status (active, expired, pending admin verification)
 $membership_status = '';
 if ($current_membership) {
     $current_membership_end = new DateTime($current_membership['end_date']);
     $current_date = new DateTime();
-    
-    // Check if the payment is verified (assuming 'status' is a boolean or a specific string like 'verified')
-    if ($current_membership['status'] === 'verified' || $current_membership['status'] === true) {
-        // Payment is verified, now check if the membership is still active
+
+    // Check if the membership is active, expired, or pending admin verification
+    if ($current_membership['status'] === 'active') {
+        // Membership is active
         if ($current_date <= $current_membership_end) {
             $membership_status = 'Active';
         } else {
             $membership_status = 'Expired';
         }
+    } elseif ($current_membership['status'] === 'pending verification') {
+        // Membership is pending admin verification
+        $membership_status = 'Pending Admin Verification';
     } else {
-        // Payment is not verified
-        $membership_status = 'Pending Verification';
+        // Membership is expired
+        $membership_status = 'Inactive. Wait for admin verification';
     }
+} else {
+    $membership_status = 'No active membership';
 }
 
 

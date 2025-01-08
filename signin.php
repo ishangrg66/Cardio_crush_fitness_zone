@@ -21,6 +21,7 @@
         padding: 0;
         min-height: 100vh;
         min-width: 100vw;
+        background-color:rgb(19,23,24);
       }
 
       .container {
@@ -45,13 +46,14 @@
         background: white;
         padding: 55px;
         text-align: center;
+        background:hsla(240, 37%, 89%, 0.075);
         border-radius: 10px;
         box-shadow: -2px 2px 15px rgba(0, 0, 0, 0.5);
       }
 
       .form-box h1 {
         font-size: 25px;
-        color: green;
+        color: white;
       }
       .form-box h1:hover {
         color: rgb(75, 176, 212);

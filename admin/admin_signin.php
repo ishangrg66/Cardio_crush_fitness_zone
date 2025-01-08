@@ -19,6 +19,7 @@
       body {
         margin: 0;
         padding: 0;
+        background-color:rgb(19,23,24);
         min-height: 100vh;
         min-width: 100vw;
       }
@@ -26,17 +27,38 @@
       .container {
         width: 100%;
         height: 100vh;
+        
         background-position: center;
         background-size: cover;
         display: flex;
         justify-content: center;
         align-items: center;
       }
+      
+    .title {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .warning {
+      color: red;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .underline {
+      width: 50px;
+      height: 3px;
+      background: #3498db;
+      margin: 0 auto 20px auto;
+    }
 
       .form-box {
         width: 90%;
         max-width: 450px;
         min-width: 300px;
+        background-color:hsla(240, 37%, 89%, 0.075);
         background: white;
         padding: 55px;
         text-align: center;
@@ -131,6 +153,7 @@
       <div class="form-box">
         <h1 class="title">Admin Log In</h1>
         <div class="underline"></div>
+        <p class="warning">Admin Access Only: Unauthorized access is prohibited.</p>
         <form
           action="admin_login.php"
           method="post"

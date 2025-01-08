@@ -30,6 +30,7 @@ function showNewMembership() {
 
 // Trainers
 function showTrainers() {
+  event.preventDefault(); // Prevent default behavior
   $.ajax({
     url: "./adminView/viewTrainers.php",
     method: "post",

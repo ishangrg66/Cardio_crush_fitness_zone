@@ -1,50 +1,57 @@
 <?php
-include_once "dbconnect.php";
+include_once "dbconnect.php";  // Include your DB connection
 
-// Check if membership_id and action are passed via POST
-if (isset($_POST['membership_id']) && isset($_POST['action'])) {
-    $membership_id = (int) $_POST['membership_id'];
-    $action = $_POST['action'];
+// Check if form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $membership_id = $_POST['membership_id'];
 
-    // If action is to accept, update the status to active
-    if ($action == 'active') {
-        $sql = "UPDATE memberships SET status = 'active' WHERE membership_id = ?";
-        $stmt = $conn->prepare($sql);
+    if (isset($_POST['update_status'])) {
+        $status = $_POST['update_status'];
 
-        if ($stmt) {
-            $stmt->bind_param("i", $membership_id);
-            if ($stmt->execute()) {
-                echo "Membership status updated to active.";
+        if ($status === 'active') {
+            // Update payment status and membership status to active
+            $update_payment_query = $conn->prepare("UPDATE memberships SET payment_status = ?, status = ? WHERE membership_id = ?");
+            $active_status = 'active';
+            $update_payment_query->bind_param("ssi", $status, $active_status, $membership_id);
+
+            if ($update_payment_query->execute()) {
+                echo "<script>alert('Membership activated successfully.');</script>";
+                echo "<script>window.location.href = '../index.php';</script>";
+                exit();
             } else {
-                echo "Error updating membership status: " . $stmt->error;
+                echo "<script>alert('Failed to activate membership.');</script>";
+                echo "<script>window.location.href = '../index.php';</script>";
+                exit();
             }
-            $stmt->close();
+        } elseif ($status === 'rejected') {
+            // Delete membership record when status is rejected
+            $delete_query = $conn->prepare("DELETE FROM memberships WHERE membership_id = ?");
+            $delete_query->bind_param("i", $membership_id);
+
+            if ($delete_query->execute()) {
+                echo "<script>alert('Membership successfully rejected and deleted.');</script>";
+                echo "<script>window.location.href = '../index.php';</script>";
+                exit();
+            } else {
+                echo "<script>alert('Failed to delete rejected membership.');</script>";
+                echo "<script>window.location.href = '../index.php';</script>";
+                exit();
+            }
+        }
+    } elseif (isset($_POST['cancel_membership'])) {
+        // Delete membership record when admin cancels it
+        $cancel_query = $conn->prepare("DELETE FROM memberships WHERE membership_id = ?");
+        $cancel_query->bind_param("i", $membership_id);
+
+        if ($cancel_query->execute()) {
+            echo "<script>alert('Membership successfully cancelled.');</script>";
+            echo "<script>window.location.href = '../index.php';</script>";
+            exit();
         } else {
-            echo "Error preparing statement: " . $conn->error;
+            echo "<script>alert('Failed to cancel membership.');</script>";
+            echo "<script>window.location.href = '../index.php';</script>";
+            exit();
         }
     }
-    // If action is to reject, delete the membership from the database
-    elseif ($action == 'reject') {
-        $sql = "DELETE FROM memberships WHERE membership_id = ?";
-        $stmt = $conn->prepare($sql);
-
-        if ($stmt) {
-            $stmt->bind_param("i", $membership_id);
-            if ($stmt->execute()) {
-                echo "Membership rejected and removed from the database.";
-            } else {
-                echo "Error rejecting membership: " . $stmt->error;
-            }
-            $stmt->close();
-        } else {
-            echo "Error preparing statement: " . $conn->error;
-        }
-    } else {
-        echo "Invalid action.";
-    }
-} else {
-    echo "Invalid request.";
 }
-
-$conn->close();
 ?>

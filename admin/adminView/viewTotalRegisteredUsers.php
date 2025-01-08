@@ -31,7 +31,7 @@
       <!-- <td><?=$row["password"]?></td>    -->
       <td>
    <!-- Edit Button: Triggers the modal with user data -->
-   <button class="btn btn-primary" style="height:40px" onclick="openEditModal(<?=$row['id']?>, '<?=$row['f_name']?>', '<?=$row['l_name']?>', '<?=$row['email']?>', '<?=$row['phone']?>', '<?=$row['birthdate']?>')">Edit</button>
+   <button class="btn btn-success" style="height:40px" onclick="openEditModal(<?=$row['id']?>, '<?=$row['f_name']?>', '<?=$row['l_name']?>', '<?=$row['email']?>', '<?=$row['phone']?>', '<?=$row['birthdate']?>')">Edit</button>
 </td>
       <td><button class="btn btn-danger" style="height:40px" onclick="totalRegisteredUsersDelete('<?=$row['id']?>')">Delete</button></td>
       </tr>
@@ -46,7 +46,7 @@
         <!-- Add New User Start -->
 
    <!-- Trigger the modal with a button -->
-<button type="button" class="btn" style="height:40px" onclick="openModal()">Add New User</button>
+<button type="button" class="btn btn-primary" style="height:40px" onclick="openModal()">Add New User</button>
 
 <!-- Modal -->
 <div id="myModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
@@ -416,7 +416,7 @@ window.onclick = function(event) {
     color: red;
     font-size: 12px;
   }
-
+/* 
   .btn {
     background-color: #007bff;
     color: white;
@@ -426,7 +426,7 @@ window.onclick = function(event) {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
+  } */
 
   .btn:hover {
     background-color: #0056b3;

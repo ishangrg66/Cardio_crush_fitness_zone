@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['buy_plan'])) {
                 exit;
             } else {
                 // File upload is successful, proceed with the code
-                $target_dir = $_SERVER['DOCUMENT_ROOT'] . "/cardiocrush-master/admin/uploads/payment_proofs/";
+                $target_dir = $_SERVER['DOCUMENT_ROOT'] . "/cardiocrush-master/admin/payment_proofs/";
                 $payment_proof = $target_dir . basename($_FILES["payment_proof"]["name"]);
                 
                 // Log the target path to verify it's correct
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['buy_plan'])) {
 
                         // Now insert the payment record into payments table
                         $payment_query = $conn->prepare(
-                            "INSERT INTO payments (membership_id, amount, payment_proof, status) VALUES (?, ?, ?, 'pending')"
+                            "INSERT INTO payments (membership_id, amount, payment_proof) VALUES (?, ?, ?)"
                         );
                         $payment_query->bind_param("ids", $membership_id, $price, $payment_proof);
 

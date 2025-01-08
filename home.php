@@ -488,6 +488,8 @@ if ($result->num_rows > 0) {
                     <label>Scan QR Code to Make Payment:</label><br>
                     <img src="image/qrcode.png" alt="QR Code" width="200px">
                     <br><br>
+
+                    
                     <!-- <input type="hidden" name="status" value="active"> -->
                     <button type="submit" name="buy_plan">Buy Now</button>
                 </form>

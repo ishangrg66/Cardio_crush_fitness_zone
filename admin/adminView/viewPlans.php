@@ -27,7 +27,7 @@
 
       <!-- Edit Button -->
       <td>
-        <button class="btn btn-primary" style="height:40px" onclick="populateEditForm('<?= $row['plans_id'] ?>', '<?= $row['plan_name'] ?>', '<?= $row['description'] ?>', '<?= $row['duration'] ?>', '<?= $row['price'] ?>')">
+        <button class="btn btn-success" style="height:40px" onclick="populateEditForm('<?= $row['plans_id'] ?>', '<?= $row['plan_name'] ?>', '<?= $row['description'] ?>', '<?= $row['duration'] ?>', '<?= $row['price'] ?>')">
           Edit
         </button>
       </td>
