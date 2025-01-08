@@ -677,6 +677,7 @@ async function fetchPlans() {
 document.addEventListener('DOMContentLoaded', function () {
     fetchTrainers();
     fetchPlans();
-});</script>
+});
+</script>
   </body>
 </html>

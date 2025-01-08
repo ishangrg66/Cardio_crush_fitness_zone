@@ -91,9 +91,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['buy_plan'])) {
                 if (move_uploaded_file($_FILES["payment_proof"]["tmp_name"], $payment_proof)) {
                     // Insert membership record into memberships table
                     $membership_query = $conn->prepare(
-                        "INSERT INTO memberships (id, plans_id, start_date, end_date, status) VALUES (?, ?, ?, ?, 'inactive')"
-                    );
-                    $membership_query->bind_param("iiss", $user_id, $plan_id, $start_date, $end_date);
+                        "INSERT INTO memberships (id, plans_id, start_date, end_date, status, payment_status, payment_proof) 
+                        VALUES (?, ?, ?, ?, 'inactive', 'pending', ?)");
+                     $membership_query->bind_param("iisss", $user_id, $plan_id, $start_date, $end_date, $payment_proof);
+
 
                     if ($membership_query->execute()) {
                         $membership_id = $conn->insert_id;  // Get the inserted membership ID
@@ -105,6 +106,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['buy_plan'])) {
                         $payment_query->bind_param("ids", $membership_id, $price, $payment_proof);
 
                         if ($payment_query->execute()) {
+                            // Get the payment_id from the insert query
+                             $payment_id = $conn->insert_id;
                             // Redirect to home page after successful payment submission
                             echo "<script>alert('Payment submitted successfully. Awaiting admin verification.'); window.location.href='home.php';</script>";
                         } else {

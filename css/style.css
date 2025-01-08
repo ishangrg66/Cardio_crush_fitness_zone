@@ -195,6 +195,7 @@ img{
 .nav{
     height: var(--header-height);
     display: flex;
+    max-width: 1600px;
     justify-content: space-between;
     align-items: center;
 }

@@ -1,15 +1,6 @@
 <?php
 // Database connection
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'cardiocrush';
-
-$conn = new mysqli($host, $user, $password, $database);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include "db.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Sanitize and validate the inputs
@@ -21,9 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die('All fields are required.');
     }
 
-    // Validate phone number (check if it's 10 digits long and starts with 96 or 97 or 98)
+    // Validate phone number (check if it's 10 digits long and starts with 96, 97, or 98)
     if (!preg_match('/^(96|97|98)\d{8}$/', $phone_number)) {
-        die('Please enter a valid 10-digit phone number starting with 96 or 97, or 98.');
+        die('Please enter a valid 10-digit phone number starting with 96, 97, or 98.');
     }
 
     // Validate image upload
@@ -38,21 +29,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
         $imageType = mime_content_type($imageTmp);
         if (!in_array($imageType, $allowedTypes)) {
-            die('Invalid image type. Only JPEG, PNG, JPG allowed.');
+            echo '<script>alert("Invalid image type. Only JPEG, PNG, JPG allowed.");</script>';
+            die();
         }
 
         // Check for file size (max 5MB)
         if ($imageSize > 5000000) {
-            die('Image size is too large. Maximum allowed size is 5MB.');
-            location("header:add_trainer_form.php?error=image size is too large. Max size is 5MB");
-            exit();
+            echo '<script>alert("Image size is too large. Maximum allowed size is 5MB.");</script>';
+            die();
         }
 
         // Upload the image
         $uploadDir = 'uploads/';
         $uploadFile = $uploadDir . basename($imageName);
         if (!move_uploaded_file($imageTmp, $uploadFile)) {
-            die('Error uploading image.');
+            echo '<script>alert("Error uploading image.");</script>';
+            die();
         }
 
         // Save relative path to the image for web access
@@ -63,9 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("ssss", $trainer_name, $phone_number, $address, $relativePath);
         
         if ($stmt->execute()) {
-            header("Location:add_trainer_form.php?success=New trainer added successfully");
+            echo '<script>alert("New trainer added successfully");</script>';
+            header("Location: index.php?success=New trainer added successfully");
         } else {
-            header("Location:add_trainer_form.php?error=New trainer cannot be added");
+            echo '<script>alert("New trainer cannot be added");</script>';
+            header("Location: index.php?error=New trainer cannot be added");
         }
     } else {
         die('Image is required.');

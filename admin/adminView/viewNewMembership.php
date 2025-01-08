@@ -35,18 +35,24 @@
       <td><?= htmlspecialchars($row["end_date"]) ?></td>
       <td><?= htmlspecialchars($row["payment_status"]) ?></td>
       <td>
-        <?php if ($row["payment_proof"]): ?>
-          <img src="uploads/payment_proofs/<?= htmlspecialchars($row["payment_proof"]) ?>" alt="Payment Proof" width="100px" height="100px">
-        <?php else: ?>
-          No payment proof uploaded
-        <?php endif; ?>
+      <?php if ($row["payment_proof"]): ?>
+    <img src="/cardiocrush-master/admin/uploads/payment_proofs/<?= htmlspecialchars($row["payment_proof"]) ?>" 
+         alt="Payment Proof" 
+         width="100px" 
+         height="100px">
+<?php else: ?>
+    <p>No payment proof provided.</p>
+<?php endif; ?>
+
       </td>
       <td>
-        <button class="btn btn-success" onclick="verifyMembership(<?= $row['membership_id'] ?>, 'accept')">Accept</button>
-      </td>
-      <td>
-        <button class="btn btn-danger" onclick="verifyMembership(<?= $row['membership_id'] ?>, 'reject')">Reject</button>
-      </td>
+    <!-- Accept button -->
+    <button class="btn btn-success" onclick="updateMembershipStatus(<?=$row['membership_id']?>, 'active')">Accept</button>
+  </td>
+  <td>
+    <!-- Reject button -->
+    <button class="btn btn-danger" onclick="updateMembershipStatus(<?=$row['membership_id']?>, 'reject')">Reject</button>
+  </td>
     </tr>
     <?php
         }
@@ -59,23 +65,20 @@
 
 <script>
   // Function to handle membership acceptance or rejection
-  function verifyMembership(membership_id, action) {
-    const confirmation = confirm(`Are you sure you want to ${action} this membership?`);
-    if (confirmation) {
-      // Make an AJAX request to update the membership status
-      fetch(`verify_membership.php?membership_id=${membership_id}&action=${action}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            alert(`Membership has been ${action}ed successfully.`);
-            location.reload();  // Reload the page to reflect changes
-          } else {
-            alert('Error: Unable to process the request.');
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    }
-  }
+  function updateMembershipStatus(membershipId, action) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "update_membership_status.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.send("membership_id=" + membershipId + "&action=" + action);
+
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            alert("Membership " + (action === 'active' ? 'accepted' : 'rejected') + " successfully!");
+            location.reload();  // Reload the page to reflect the changes
+        } else {
+            alert("Error updating membership status.");
+        }
+    };
+}
 </script>
