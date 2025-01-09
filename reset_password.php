@@ -1,3 +1,52 @@
+<?php
+include 'dbconnection.php';
+
+$show_form = false; // Flag to control form display
+$error_message = ""; // Variable to hold error messages
+
+if (isset($_GET['token'])) {
+    $token = mysqli_real_escape_string($conn, $_GET['token']);
+    $current_time = time();
+
+    // Validate token
+    $query = "SELECT * FROM user_account WHERE reset_token='$token' AND token_expiry >= $current_time";
+    $result = mysqli_query($conn, $query);
+
+    if (mysqli_num_rows($result) > 0) {
+        $show_form = true; // Valid token, show form
+    } else {
+        $error_message = "Invalid or expired token.";
+    }
+} else {
+    $error_message = "No token provided.";
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $show_form) {
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $c_password = mysqli_real_escape_string($conn, $_POST['c_password']);
+
+    if ($password === $c_password) {
+        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+
+        // Update password and clear token
+        $updateQuery = "UPDATE user_account SET password='$hashed_password', reset_token=NULL, token_expiry=NULL WHERE reset_token='$token'";
+        if (mysqli_query($conn, $updateQuery)) {
+          echo "<script>
+          alert('Password updated successfully.');
+          window.location.href = 'signin.php';
+        </script>";
+            exit();
+        } else {
+            $error_message = "Error updating password.";
+        }
+    } else {
+        $error_message = "Passwords do not match.";
+    }
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -133,41 +182,26 @@
 
   <body>
     <div class="container">
-      <div class="form-box">
-        <h1 class="title">Recover Your Account</h1>
-        <!-- <div class="underline"></div> -->
-        <!-- Error message section -->
-        <?php if (isset($_GET['error'])): ?>
-        <div class="error">
-          <?php echo htmlspecialchars($_GET['error']); ?>
+        <div class="form-box">
+            <?php if ($show_form): ?>
+                <h1 class="title">Recover Your Account</h1>
+                <form method="post">
+                    <div class="input-group">
+                        <div class="input-field">
+                            <input type="password" name="password" placeholder="New Password" required>
+                        </div>
+                        <div class="input-field">
+                            <input type="password" name="c_password" placeholder="Confirm Password" required>
+                        </div>
+                    </div>
+                    <div class="btn-field">
+                        <button type="submit">Reset</button>
+                    </div>
+                </form>
+            <?php else: ?>
+                <div class="error"><?php echo $error_message; ?></div>
+            <?php endif; ?>
         </div>
-        <?php endif; ?>
-        <form
-          action="recover_email.php"
-          method="post"
-          onsubmit="return form_validate()"
-        >
-          <div class="input-group">
-            <div class="input-field" id="email-field">
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Enter your registered email here"
-                required
-              />
-            </div>
-
-          </div>
-          <div class="btn-field">
-            <button type="submit" id="signInBtn" name="sendmail">
-              <span>Send Mail</span>
-            </button>
-          </div>
-        </form>
-      </div>
     </div>
-
-    <!-- Script file -->
-  </body>
+</body>
 </html>

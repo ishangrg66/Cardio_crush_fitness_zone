@@ -38,8 +38,9 @@
       <td><?= htmlspecialchars($row["payment_status"]) ?></td>
       <td>
         <?php if (!empty($row["payment_proof"])): ?>
-          <img src="<?= htmlspecialchars($row["payment_proof"]) ?>" 
+          <img src="C:/Xamppppp/htdocs/cardiocrush-master/admin/payment_proofs/<?= htmlspecialchars($row["payment_proof"]) ?>" 
                width="200px" 
+               alt="Payment"
                height="200px">
         <?php else: ?>
           <p>No payment proof provided.</p>

@@ -9,25 +9,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $image = '';
     if (!empty($_FILES['image']['name'])) {
-        $target_dir = "uploads/";
-        $target_file = $target_dir . basename($_FILES['image']['name']);
-        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        $target_dir = __DIR__ . '/uploads/';
+        if (!is_dir($target_dir)) {
+            mkdir($target_dir, 0777, true);
+            if (!is_dir($target_dir)) {
+                die("Failed to create uploads directory.");
+            }
+        }
 
-        // Check if the file is an image
+        if (!is_writable($target_dir)) {
+            die("Uploads directory is not writable.");
+        }
+
+        // Sanitize the file name
+        $imageName = preg_replace('/[^a-zA-Z0-9_\.-]/', '', basename($_FILES['image']['name']));
+        $target_file = $target_dir . $imageName;
+
+        // Check file type
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
         $check = getimagesize($_FILES['image']['tmp_name']);
         if ($check === false) {
             die("File is not an image.");
         }
 
-        // Allow certain file formats
         if (!in_array($imageFileType, ['jpg', 'png', 'jpeg'])) {
             die("Only JPG, JPEG, and PNG files are allowed.");
         }
 
         if (!move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-            die("There was an error uploading the file.");
+            die("Failed to upload the image. Check directory existence and permissions.");
         }
-        $image = $target_file;
+
+        $image = "admin/uploads/" . $imageName;
     }
 
     $sql = "UPDATE trainers SET trainer_name = ?, phone_number = ?, address = ?";
