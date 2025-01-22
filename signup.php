@@ -104,6 +104,11 @@
     p span a:hover {
       text-decoration: underline;
     }
+    .required::after{
+      content:"*";
+      color:red;
+      margin-left: 5px;
+    }
   </style>
 </head>
 <body>
@@ -113,36 +118,36 @@
       <div class="underline"></div>
       <form action="register.php" method="post" onsubmit="return form_validate()">
         <div class="input-field" id="fname-field">
-          <label for="fname">First Name</label>
+          <label for="fname" class="required">First Name</label>
           <input type="text" name="fname" id="fname" placeholder="First name" required />
           <span id="fname_msg"></span>
         </div>
         <div class="input-field" id="lname-field">
-          <label for="lname">Last Name</label>
+          <label for="lname" class="required">Last Name</label>
           <input type="text" name="lname" id="lname" placeholder="Last name" required />
           <span id="lname_msg"></span>
         </div>
         <div class="input-field" id="email-field">
-          <label for="email">Email</label>
+          <label for="email" class="required">Email</label>
           <input type="email" name="email" id="email" placeholder="Email" required />
           <span id="email_msg"></span>
         </div>
         <div class="input-field" id="phone-field">
-          <label for="phone">Phone</label>
+          <label for="phone" class="required">Phone</label>
           <input type="text" name="phone" id="phone" placeholder="Phone" required />
           <span id="phone_msg"></span>
         </div>
         <div class="input-field" id="dob-field">
-          <label for="date">Date of Birth</label>
+          <label for="date" class="required">Date of Birth</label>
           <input type="date" id="date" name="dob" placeholder="Date of Birth" />
         </div>
         <div class="input-field" id="password-field">
-          <label for="password">Password</label>
+          <label for="password" class="required">Password</label>
           <input type="password" name="password" id="password" placeholder="Password" required />
           <span id="password_msg"></span>
         </div>
         <div class="input-field" id="cpassword-field">
-          <label for="cpassword">Confirm Password</label>
+          <label for="cpassword" class="required">Confirm Password</label>
           <input type="password" name="cpassword" id="cpassword" placeholder="Confirm Password" required />
           <span id="cpassword_msg"></span>
         </div>

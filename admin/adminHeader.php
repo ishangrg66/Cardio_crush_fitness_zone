@@ -7,9 +7,9 @@
  <!-- nav -->
  <nav  class="navbar navbar-expand-lg navbar-light px-5" style="background-color: #3B3131;">
     <!-- LOGO Here -->
-    <a class="navbar-brand ml-5" href="./index.php">
-        <!-- <img src="./LOGO/logo-white.png" width="80" height="80" alt="Cardio Crush Fitness"> -->
-        <img src="./admin/adminView/LOGO/logo-white.png" width="80" height="80" alt="CardioCrush Fitness">
+    <a class="navbar-brand ml-3" href="./index.php">
+        <img src="../admin/uploads/assets/images/logo-no-background.png" width="150" alt="Cardio Crush Fitness">
+      
     </a>
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
     
