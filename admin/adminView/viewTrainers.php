@@ -36,7 +36,7 @@
 
     /* Header Row Styling */
     .trainers-table th {
-        background-color: rgb(118, 64, 16);
+        background-color: rgb(67, 112, 236);
         /* Light blue background for headers */
         color: white;
         /* White text for contrast */

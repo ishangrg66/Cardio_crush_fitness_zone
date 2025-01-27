@@ -43,10 +43,10 @@ if ($current_membership) {
         }
     } elseif ($current_membership['status'] === 'pending verification') {
         // Membership is pending admin verification
-        $membership_status = 'Pending Admin Verification';
+        $membership_status = 'Pending Verification';
     } else {
         // Membership is expired
-        $membership_status = 'Inactive. Wait for admin verification';
+        $membership_status = 'Inactive';
     }
 } else {
     $membership_status = 'No active membership';
@@ -419,6 +419,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
             display: block;
             width: 30%;
         }
+
+        /* Styling for Cancel Membership Button */
+        .action-button.cancel {
+            background-color: #ff4d4d;
+            /* Red background color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-button.cancel:hover {
+            background-color: #e60000;
+            /* Darker red when hovered */
+        }
+
+        /* Styling for inactive membership text */
+        p {
+            font-size: 16px;
+            color: #888;
+        }
+
+        /* Style for confirmation alert */
+        form {
+            margin-top: 20px;
+        }
+
+        form .action-button.cancel {
+            display: block;
+            margin-top: 10px;
+            width: 200px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -497,9 +533,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
                 <p><strong>End Date:</strong> <?php echo htmlspecialchars($current_membership['end_date']); ?></p>
                 <p><strong>Status:</strong> <?php echo $membership_status; ?></p>
 
-                <form action="delete_plan.php" method="POST" onsubmit="return confirm('Are you sure you want to delete your current membership plan?');">
-                    <button type="submit" class="action-button delete">Delete Plan</button>
-                </form>
+                <?php if ($current_membership['status'] === 'active'): ?>
+                    <!-- Cancel membership and set it to inactive -->
+                    <form action="cancel_membership.php" method="POST" onsubmit="return confirm('Are you sure you want to cancel your membership?');">
+                        <input type="hidden" name="membership_id" value="<?= htmlspecialchars($current_membership['membership_id']) ?>">
+                        <button type="submit" class="action-button cancel" name="update_status" value="inactive">Cancel Membership</button>
+                    </form>
+                <?php elseif ($current_membership['status'] === 'inactive'): ?>
+                    <p>Your membership is currently inactive.</p>
+                <?php endif; ?>
             <?php else: ?>
                 <p>You have no active memberships.</p>
             <?php endif; ?>
