@@ -12,8 +12,6 @@ if (isset($_POST['adminSignIn'])) {
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // $_COOKIE(username)
-
     if ($result->num_rows > 0) {
         $admin = $result->fetch_assoc();
 
@@ -21,15 +19,20 @@ if (isset($_POST['adminSignIn'])) {
         if($password === $admin['password']) {
             // Start a session and redirect to index.php
             session_start();
-            $_SESSION['admin_id'] = $admin; // Store admin info in the session
+            $_SESSION['admin_id'] = $admin['id']; // Store admin ID in session
+            $_SESSION['admin_email'] = $admin['email']; // Optionally store the email
             header("Location: ../admin/index.php");
             exit();
         } else {
-            echo "Login unsuccessful: Incorrect email or password.";
+            // Pass error message through the session or redirect back
+            $_SESSION['error_message'] = "Login failed: The email or password you entered is incorrect. Please try again.";
+            header("Location: ../admin/admin_signin.php");
             exit();
         }
     } else {
-        echo "Login unsuccessful: Credentials did not match.";
+        // Pass error message through the session or redirect back
+        $_SESSION['error_message'] = "Login failed: No account found with the entered email. Please check your email and try again.";
+        header("Location: ../admin/admin_signin.php");
         exit();
     }
 } else {

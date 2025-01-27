@@ -60,25 +60,19 @@ if ($result->num_rows > 0) {
 
 /* Links inside the dropdown */
 .dropdown-content a {
-    color: black;
+    color: white;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
 }
-
-/* Change color of links on hover */
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
+.dropdown .dropdown-btn a{
+  color: white;
+  font-size: 20px;
 }
-
-/* Show the dropdown menu when hovering over the button */
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
 /* Change the button background on hover */
 .dropdown:hover .dropdown-btn {
-    background-color: #3e8e41;
+    background-color:rgb(253, 94, 2);
+    color: white;
 }
     </style>
     <title>Cardio Crush Fitness Zone</title>
@@ -110,22 +104,11 @@ if ($result->num_rows > 0) {
             <li class="nav__item">
               <a href="#pricing" class="nav__link">Pricing</a>
             </li>
-           
-<!-- Register Section (only visible when logged out) -->
-<div class="nav__link">
-    <div class="dropdown">
-        <button class="button nav__button dropdown-btn">Login</button>
-        <div class="dropdown-content">
-            <a href="admin/admin_signin.php">Admin</a>
-            <a href="./signin.php">User</a>
-        </div>
-    </div>
-</div>
-
-
-
-
-
+            <div class="nav__link">
+                <div class="dropdown">
+                    <button class="button nav__button dropdown-btn"><a href="./signin.php">Login</a></button>
+                </div>
+            </div>
           </ul>
           <div class="nav__close" id="nav-close">
             <i class="ri-close-line"></i>

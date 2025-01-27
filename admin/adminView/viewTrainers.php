@@ -1,76 +1,153 @@
+<style>
+    /* Trainers Section */
+    .trainers-section {
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    .trainers-section h3 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.8rem;
+        color: #333;
+    }
+
+    /* Table Styles */
+    .trainers-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 auto;
+    }
+
+    .trainers-table th,
+    .trainers-table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: center;
+        font-size: 1rem;
+        color: #555;
+    }
+
+    .trainers-table th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+        color: #222;
+    }
+
+    /* Header Row Styling */
+    .trainers-table th {
+        background-color: rgb(118, 64, 16);
+        /* Light blue background for headers */
+        color: white;
+        /* White text for contrast */
+        font-weight: bold;
+    }
+
+    .trainers-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .trainers-table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Button Styles */
+    .action-button {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Edit Button */
+    .action-button.edit {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .action-button.edit:hover {
+        background-color: #45a049;
+    }
+
+    /* Delete Button */
+    .action-button.delete {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .action-button.delete:hover {
+        background-color: #d32f2f;
+    }
+
+    /* No Trainers Found */
+    .text-center {
+        text-align: center;
+        color: #888;
+        font-size: 1.1rem;
+    }
+</style>
+
 <!-- This is Trainers of sidebar -->
-
-<div>
-  <h3 class="text-center">Trainers Details</h3>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Trainer Name</th>
-        <th>Image</th>
-        <th>Phone Number</th>
-        <th class="text-center" colspan="2">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-      include_once "db.php";
-      $sql = "SELECT * FROM trainers";
-      $result = $conn->query($sql);
-      if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-      ?>
-       <tr>
-    <td>
-        <?= htmlspecialchars($row["trainer_name"]) ?>
-    </td>
-    <td>
-    <?php if (!empty($row["image"])): ?>
-        <img 
-            src="<?= htmlspecialchars($row["image"]) ?>" 
-            style="width: 100px; height: 150px; border-radius: 5px;"
-        >
-    <?php else: ?>
-        <p>No Image Available</p>
-    <?php endif; ?>
-</td>
-
-    <td><?= htmlspecialchars($row["phone_number"]) ?></td>
-    <td>
-       <!-- Button to trigger edit modal -->
-<button type="button" class="btn btn-success" onclick="openEditModal('<?= $row['trainer_id'] ?>', '<?= htmlspecialchars($row['trainer_name']) ?>', '<?= htmlspecialchars($row['phone_number']) ?>', '<?= htmlspecialchars($row['image']) ?>', '<?= htmlspecialchars($row['address']) ?>')">
-    Edit
-</button>
-    </td>
-    <td>
-        <form action="controller/trainerDeleteController.php" method="POST">
-            <input type="hidden" name="trainer_id" value="<?= $row['trainer_id'] ?>">
-            <button type="submit" class="btn btn-danger">Delete</button>
-        </form>
-    </td>
-</tr>
-
-      <?php
-        }
-      } else {
-      ?>
-        <tr>
-          <td colspan="5" class="text-center">No trainers found</td>
-        </tr>
-      <?php
-      }
-      ?>
-    </tbody>
-  </table>
+<div class="trainers-section">
+    <h3 class="text-center">Trainers Details</h3>
+    <table class="trainers-table">
+        <thead>
+            <tr>
+                <th>Trainer Name</th>
+                <th>Phone Number</th>
+                <th class="text-center" colspan="2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            include_once "db.php";
+            $sql = "SELECT * FROM trainers";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+            ?>
+                    <tr>
+                        <td><?= htmlspecialchars($row["trainer_name"]) ?></td>
+                        <td><?= htmlspecialchars($row["phone_number"]) ?></td>
+                        <td>
+                            <!-- Button to trigger edit modal -->
+                            <button
+                                class="action-button edit"
+                                onclick="openEditModal('<?= $row['trainer_id'] ?>', '<?= htmlspecialchars($row['trainer_name']) ?>', '<?= htmlspecialchars($row['phone_number']) ?>', '<?= htmlspecialchars($row['image']) ?>', '<?= htmlspecialchars($row['address']) ?>')">
+                                Edit
+                            </button>
+                        </td>
+                        <td>
+                            <form action="controller/trainerDeleteController.php" method="POST">
+                                <input type="hidden" name="trainer_id" value="<?= $row['trainer_id'] ?>">
+                                <button type="submit" class="action-button delete">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php
+                }
+            } else {
+                ?>
+                <tr>
+                    <td colspan="4" class="text-center">No trainers found</td>
+                </tr>
+            <?php
+            }
+            ?>
+        </tbody>
+    </table>
 </div>
 
 
 
-        <!-- Add New Trainer Start -->
+<!-- Add New Trainer Start -->
 
- <!-- Button to trigger modal -->
+<!-- Button to trigger modal -->
 <button type="button" class="btn btn-secondary" style="height:40px" data-toggle="modal" data-target="#myModal">
     Add New Trainer
-</button>    
+</button>
 
 <!-- Modal Structure -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -165,12 +242,12 @@
         margin-bottom: 15px;
     }
 
-    .form-control, 
-    .form-control-file, 
+    .form-control,
+    .form-control-file,
     textarea {
         border-radius: 5px;
         resize: none;
-    } 
+    }
 
     .btn-primary {
         background-color: #007bff;
@@ -192,93 +269,95 @@
 </style>
 
 <script>
-  // Client-side validation before form submission
-  function validateForm() {
-            const name = document.querySelector('input[name="trainer_name"]').value;
-            const phone = document.querySelector('input[name="phone_number"]').value;
-            const address = document.querySelector('textarea[name="address"]').value;
-            const image = document.querySelector('input[name="image"]').files[0];
+    // Client-side validation before form submission
+    function validateForm() {
+        const name = document.querySelector('input[name="trainer_name"]').value;
+        const phone = document.querySelector('input[name="phone_number"]').value;
+        const address = document.querySelector('textarea[name="address"]').value;
+        const image = document.querySelector('input[name="image"]').files[0];
 
-            // Validate Trainer Name (non-empty)
-            if (name.trim() === '') {
-                alert('Please enter the trainer\'s name.');
-                return false;
-            }
-
-            // Validate Phone Number (non-empty and numeric)
-            const phonePattern = /^(96|97|98)[0-9]{8}$/;
-            if (!phonePattern.test(phone)) {
-                alert('Please enter a valid phone number with 10 digits.');
-                return false;
-            }
-
-            // Validate Address (non-empty)
-            if (address.trim() === '') {
-                alert('Please enter the address.');
-                return false;
-            }
-
-            // Validate Image (non-empty and valid image type)
-            if (!image) {
-                alert('Please upload an image.');
-                return false;
-            }
-
-            const allowedImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-            if (!allowedImageTypes.includes(image.type)) {
-                alert('Please upload a valid image (JPEG, PNG, JPG).');
-                return false;
-            }
-
-            return true; // Form is valid
+        // Validate Trainer Name (non-empty)
+        if (name.trim() === '') {
+            alert('Please enter the trainer\'s name.');
+            return false;
         }
 
+        // Validate Phone Number (non-empty and numeric)
+        const phonePattern = /^(96|97|98)[0-9]{8}$/;
+        if (!phonePattern.test(phone)) {
+            alert('Please enter a valid phone number with 10 digits.');
+            return false;
+        }
 
-        function trainerDelete(trainer_id) {
-    if (confirm('Are you sure you want to delete this trainer?')) {
-        // AJAX request to delete the trainer
-        $.ajax({
-            url: '/controller/trainerDeleteController.php',
-            type: 'POST',
-            data: { id: trainer_id },
-            success: function(response) {
-                if (response === 'success') {
-                    alert('Trainer deleted successfully');
-                    // Optionally refresh the page or table
-                    location.reload();
-                } else {
-                    alert('Error deleting trainer');
+        // Validate Address (non-empty)
+        if (address.trim() === '') {
+            alert('Please enter the address.');
+            return false;
+        }
+
+        // Validate Image (non-empty and valid image type)
+        if (!image) {
+            alert('Please upload an image.');
+            return false;
+        }
+
+        const allowedImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        if (!allowedImageTypes.includes(image.type)) {
+            alert('Please upload a valid image (JPEG, PNG, JPG).');
+            return false;
+        }
+
+        return true; // Form is valid
+    }
+
+
+    function trainerDelete(trainer_id) {
+        if (confirm('Are you sure you want to delete this trainer?')) {
+            // AJAX request to delete the trainer
+            $.ajax({
+                url: '/controller/trainerDeleteController.php',
+                type: 'POST',
+                data: {
+                    id: trainer_id
+                },
+                success: function(response) {
+                    if (response === 'success') {
+                        alert('Trainer deleted successfully');
+                        // Optionally refresh the page or table
+                        location.reload();
+                    } else {
+                        alert('Error deleting trainer');
+                    }
                 }
-            }
-        });
-    }
-}
-
-function openEditModal(id, name, phone, image, address) {
-    document.getElementById('edit_trainer_id').value = id;
-    document.getElementById('edit_trainer_name').value = name;
-    document.getElementById('edit_phone_number').value = phone;
-    document.getElementById('edit_address').value = address;
-
-    $('#editTrainerModal').modal('show');
-}
-
-function validateEditForm() {
-    const name = document.getElementById('edit_trainer_name').value.trim();
-    const phone = document.getElementById('edit_phone_number').value.trim();
-    const address = document.getElementById('edit_address').value.trim();
-
-    if (name === '' || phone === '' || address === '') {
-        alert('All fields are required!');
-        return false;
+            });
+        }
     }
 
-    const phonePattern = /^(96|97|98)[0-9]{8}$/;
-    if (!phonePattern.test(phone)) {
-        alert('Please enter a valid phone number with 10 digits.');
-        return false;
+    function openEditModal(id, name, phone, image, address) {
+        document.getElementById('edit_trainer_id').value = id;
+        document.getElementById('edit_trainer_name').value = name;
+        document.getElementById('edit_phone_number').value = phone;
+        document.getElementById('edit_address').value = address;
+
+        $('#editTrainerModal').modal('show');
     }
 
-    return true;
-}
+    function validateEditForm() {
+        const name = document.getElementById('edit_trainer_name').value.trim();
+        const phone = document.getElementById('edit_phone_number').value.trim();
+        const address = document.getElementById('edit_address').value.trim();
+
+        if (name === '' || phone === '' || address === '') {
+            alert('All fields are required!');
+            return false;
+        }
+
+        const phonePattern = /^(96|97|98)[0-9]{8}$/;
+        if (!phonePattern.test(phone)) {
+            alert('Please enter a valid phone number with 10 digits.');
+            return false;
+        }
+
+        return true;
+    }
 </script>

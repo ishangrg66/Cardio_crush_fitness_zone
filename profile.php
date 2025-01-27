@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
     $update_query = "UPDATE user_account SET phone = ?, birthdate = ? WHERE id = ?";
     $update_stmt = $conn->prepare($update_query);
     $update_stmt->bind_param("ssi", $new_phone, $new_birthdate, $user_id);
-    
+
     if ($update_stmt->execute()) {
         // If the update was successful, reload the page to reflect the changes
         header("Location: profile.php");
@@ -78,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -89,13 +90,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
 
     <!-- RemixIcon -->
     <link
-      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
-      rel="stylesheet"
-    />
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+        rel="stylesheet" />
     <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
-    />
+        rel="stylesheet"
+        href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
     <link rel="stylesheet" href="./css/Timetable.css" />
     <title>My Profile</title>
     <!-- <link rel="stylesheet" href="styles.css"> -->
@@ -103,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
         /* General Styles */
         body {
             font-family: 'Arial', sans-serif;
-            background-color:rgb(27, 29, 30);
+            background-color: rgb(27, 29, 30);
             margin: 0;
             padding: 0;
             display: flex;
@@ -113,9 +112,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
         }
 
         .profile-container {
-            background:rgb(74, 70, 70);
+            background: rgb(244, 242, 242);
             border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             width: 90%;
             max-width: 600px;
             padding: 20px;
@@ -123,10 +121,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
 
         h2 {
             margin-bottom: 20px;
-            color: rgb(255, 255, 255);
+            color: rgb(0, 0, 0);
             font-size: 26px;
             text-align: center;
-            border-bottom: 2px solid hsl(32, 93%, 65%);
+            border-bottom: 2px solid hsl(32, 92.50%, 47.10%);
             display: inline-block;
             padding-bottom: 5px;
         }
@@ -134,11 +132,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
         p {
             font-size: 20px;
             margin: 10px 0;
-            color: hsl(17, 92%, 74%);
+            color: hsl(0, 0.00%, 0.00%);
         }
 
         strong {
-            color: white;
+            color: hsl(0, 97.40%, 44.50%);
+        }
+
+        .user-details form div strong {
+            font-size: 20px;
+        }
+
+        .user-details form div #phoneDisplay {
+            font-size: 20px;
+        }
+
+        .user-details form div #birthdateDisplay {
+            font-size: 20px;
         }
 
         form {
@@ -148,19 +158,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
         .editable {
             display: none;
             width: 40%;
-            align-items: center
+            align-items: center;
             margin-top: 5px;
             padding: 8px;
             font-size: 14px;
-            /* border: 1px solid #ccc; */
-            /* border-radius: 5px; */
             outline: none;
             transition: border 0.3s ease;
         }
-
-        /* .editable:focus {
-            border: 1px solid #00bcd4;
-        } */
 
         button {
             background-color: hsl(0, 95%, 50%);
@@ -169,27 +173,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
             border-radius: 5px;
             padding: 8px 12px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 20px;
             margin-top: 10px;
             transition: background-color 0.3s ease;
         }
 
         button:hover {
             background-color: #008c9e;
+            color: white;
         }
 
         button[type="button"] {
-            background-color:rgb(247, 29, 29);
+            background-color: rgb(247, 29, 29);
             color: #333;
-            text: bold;
-            border: 1px solid rgb(247, 29, 29);
+            /* border: 1px solid rgb(247, 29, 29); */
             padding: 5px 10px;
             font-size: 12px;
         }
 
         button[type="button"]:hover {
-            background-color: transparent;
-            border: 1px solid hsl(32, 93%, 65%); 
+            background-color: #008c9e;
             color: white;
         }
 
@@ -199,7 +202,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
             width: 100%;
         }
 
-        #phoneError, #birthdateError {
+        #phoneError,
+        #birthdateError {
             color: red;
             font-size: 14px;
             margin-top: 5px;
@@ -212,181 +216,241 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
         }
 
         .current-membership p {
-            font-size: 16px;
+            font-size: 20px;
         }
 
-/* Navigation Bar Styles */
-/* General Styling
-body {
-    margin: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f7f9;
-} */
-
-.header {
-    width: 100%;
-    background-color:transparent;
-    position: fixed;
-    padding: 15px 0;
-    top: 0px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1500px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.nav__logo {
-    display: flex;
-    align-items: center;
-    color: #fff;
-    font-size: 20px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.nav__logo img {
-    width: 40px;
-    margin-right: 10px;
-}
-
-.nav__menu {
-    display: flex;
-    align-items: center;
-}
-
-.nav__list {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.nav__item {
-    margin: 0 20px;
-}
-
-.nav__link {
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    padding: 8px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.nav__link:hover,
-.nav__link.active-link {
-    background-color: #008c9e;
-}
-
-.nav__toggle {
-    display: none;
-    font-size: 30px;
-    color: #fff;
-    cursor: pointer;
-}
-
-.nav__close {
-    display: none;
-}
-
-/* Mobile View */
-@media (max-width: 768px) {
-    .nav__menu {
-        position: fixed;
-        top: 0;
-        left: -100%;
-        height: 100%;
-        background-color: #00bcd4;
-        width: 250px;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 20px;
-        transition: 0.3s ease;
-    }
-
-    .nav__menu.active {
-        left: 0;
-    }
-
-    .nav__list {
-        flex-direction: column;
-        margin-top: 50px;
-    }
-
-    .nav__item {
-        margin: 15px 0;
-    }
-
-    .nav__toggle {
-        display: block;
-    }
-
-    .nav__close {
-        position: absolute;
-        display: block;
-        top:0.5rem;
-        right:1.5rem;
-        font-size: 30px;
-        color: hsl(0, 95%, 50%);
-        cursor: pointer;
-    }
-}
-
-        /* Responsive Design */
+        /* Responsive Styles */
         @media (max-width: 768px) {
-            .profile-container {
-                width: 100%;
-                padding: 15px;
+            h2 {
+                font-size: 22px;
             }
 
+            p,
+            .user-details form div strong,
+            .user-details form div #phoneDisplay,
+            .user-details form div #birthdateDisplay {
+                font-size: 18px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 6px 10px;
+            }
+
+            .profile-container {
+                width: 75%;
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
             h2 {
                 font-size: 20px;
             }
 
-            p {
+            p,
+            .user-details form div strong,
+            .user-details form div #phoneDisplay,
+            .user-details form div #birthdateDisplay {
+                font-size: 16px;
+            }
+
+            .current-membership p {
                 font-size: 14px;
             }
+
+            .current-membership p strong {
+                font-size: 16px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 5px 8px;
+            }
+
+            .profile-container {
+                width: 60%;
+                padding: 10px;
+            }
+        }
+
+        /* ============ Nav ================== */
+        .header {
+            width: 100%;
+            background-color: transparent;
+            position: fixed;
+            padding: 15px 0;
+            top: 0px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav__logo {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            font-size: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .nav__logo img {
+            width: 40px;
+            margin-right: 10px;
+        }
+
+        .nav__menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav__list {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav__item {
+            margin: 0 20px;
+        }
+
+        .nav__link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav__link:hover,
+        .nav__link.active-link {
+            background-color: #008c9e;
+        }
+
+        .nav__toggle {
+            display: none;
+            font-size: 30px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .nav__close {
+            display: none;
+        }
+
+        /* Mobile View */
+        @media (max-width: 768px) {
+            .nav__menu {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                height: 100%;
+                background-color: #00bcd4;
+                width: 250px;
+                flex-direction: column;
+                justify-content: space-between;
+                padding: 20px;
+                transition: 0.3s ease;
+            }
+
+            .nav__menu.active {
+                left: 0;
+            }
+
+            .nav__list {
+                flex-direction: column;
+                margin-top: 50px;
+            }
+
+            .nav__item {
+                margin: 15px 0;
+            }
+
+            .nav__toggle {
+                display: block;
+            }
+
+            .nav__close {
+                position: absolute;
+                display: block;
+                top: 0.5rem;
+                right: 1.5rem;
+                font-size: 30px;
+                color: hsl(0, 95%, 50%);
+                cursor: pointer;
+            }
+        }
+
+        .action-button {
+            background-color: #008c9e;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px 0 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-button:hover {
+            background-color: #005f6b;
+        }
+
+        .action-button.delete {
+            background-color: #e63946;
+        }
+
+        .action-button.delete:hover {
+            background-color: #a82d34;
+        }
+
+        .current-membership form button[type="submit"] {
+            display: block;
+            width: 30%;
         }
     </style>
 </head>
+
 <body>
- <!--------------- Header ----------------------->
-
- <div class="header" id="header">
-      <nav class="nav container">
-        <a href="#" class="nav__logo">
-          <img src="image/workout (1).png" alt="logo" />
-          𝐂𝐚𝐫𝐝𝐢𝐨 𝐂𝐫𝐮𝐬𝐡
-        </a>
-
-        <div class="nav__menu" id="nav-menu">
-          <ul class="nav__list">
-            <li class="nav__item">
-              <a href="home.php" class="nav__link ">Home</a>
-            </li>
-            <li class="nav__item">
-              <a href="profile.php" class="nav__link active-link">My Profile</a>
-            </li>
-            <li class="nav__item">
-              <a href="logout.php" class="nav__link">Logout</a>
-            </li>
-          </ul>
-          <div class="nav__close" id="nav-close">
-            <i class="ri-close-line"></i>
-          </div>
-        </div>
-        <!-- Toggle button -->
-        <div class="nav__toggle" id="nav-toggle">
-          <i class="ri-menu-fill"></i>
-        </div>
-      </nav>
+    <!--------------- Header ----------------------->
+    <div class="header" id="header">
+        <nav class="nav container">
+            <a href="#" class="nav__logo">
+                <img src="image/workout (1).png" alt="logo" />
+                𝐂𝐚𝐫𝐝𝐢𝐨 𝐂𝐫𝐮𝐬𝐡
+            </a>
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="home.php" class="nav__link ">Home</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="profile.php" class="nav__link active-link">My Profile</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="logout.php" class="nav__link">Logout</a>
+                    </li>
+                </ul>
+                <div class="nav__close" id="nav-close">
+                    <i class="ri-close-line"></i>
+                </div>
+            </div>
+            <!-- Toggle button -->
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="ri-menu-fill"></i>
+            </div>
+        </nav>
     </div>
     <div class="profile-container">
         <!-- User Details Section -->
@@ -398,13 +462,12 @@ body {
             <!-- Phone and Birthdate Fields with Edit Button -->
             <form method="POST" action="profile.php" onsubmit="return validateForm()">
                 <div>
-                    <strong>Phone:</strong>
+                    <strong>Contact No:</strong>
                     <span id="phoneDisplay"><?php echo htmlspecialchars($user['phone']); ?></span>
                     <input type="text" id="phoneInput" class="editable" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>" required>
                     <button type="button" onclick="editField('phone')">Edit</button>
                 </div>
                 <p id="phoneError">Phone number must start with 96, 97, or 98 and be 10 digits long.</p>
-
                 <div>
                     <strong>Birthdate:</strong>
                     <span id="birthdateDisplay"><?php echo htmlspecialchars($user['birthdate']); ?></span>
@@ -412,12 +475,10 @@ body {
                     <button type="button" onclick="editField('birthdate')">Edit</button>
                 </div>
                 <p id="birthdateError">Birthdate must be at least 10 years in the past.</p>
-
                 <!-- Save Changes -->
                 <button type="submit" id="saveChanges" name="update">Save Changes</button>
             </form>
         </div>
-
         <!-- Current Membership Section -->
         <div class="current-membership">
             <h2>Current Membership</h2>
@@ -435,6 +496,10 @@ body {
                 <p><strong>Start Date:</strong> <?php echo htmlspecialchars($current_membership['start_date']); ?></p>
                 <p><strong>End Date:</strong> <?php echo htmlspecialchars($current_membership['end_date']); ?></p>
                 <p><strong>Status:</strong> <?php echo $membership_status; ?></p>
+
+                <form action="delete_plan.php" method="POST" onsubmit="return confirm('Are you sure you want to delete your current membership plan?');">
+                    <button type="submit" class="action-button delete">Delete Plan</button>
+                </form>
             <?php else: ?>
                 <p>You have no active memberships.</p>
             <?php endif; ?>
@@ -489,15 +554,16 @@ body {
             birthdateInput.max = maxDate.toISOString().split('T')[0];
         });
 
-        document.getElementById('nav-toggle').addEventListener('click', function () {
-    document.getElementById('nav-menu').classList.add('active');
-});
+        document.getElementById('nav-toggle').addEventListener('click', function() {
+            document.getElementById('nav-menu').classList.add('active');
+        });
 
-document.getElementById('nav-close').addEventListener('click', function () {
-    document.getElementById('nav-menu').classList.remove('active');
-});
+        document.getElementById('nav-close').addEventListener('click', function() {
+            document.getElementById('nav-menu').classList.remove('active');
+        });
     </script>
 </body>
+
 </html>
 
 <?php
