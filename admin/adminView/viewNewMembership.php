@@ -223,14 +223,15 @@
             <td>
               <?php if (!empty($row["payment_proof"])): ?>
                 <img
-                  src="/cardiocrush-master/admin/payment_proofs/<?= htmlspecialchars($row["payment_proof"]) ?>"
-                  width="200"
-                  alt="Payment Proof"
-                  height="200">
+                  src="<?= htmlspecialchars($row["payment_proof"]) ?>"
+                  width="250"
+                  height="300"
+                  alt="Payment Proof">
               <?php else: ?>
                 <p>No payment proof provided.</p>
               <?php endif; ?>
             </td>
+
             <td>
               <form action="controller/update_membership_status.php" method="POST"
                 onsubmit="return confirm('Are you sure you want to update the membership status?')">

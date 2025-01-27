@@ -1,7 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 include "dbconnection.php";  // Assuming this includes the necessary database connection setup
 
 if ($conn->connect_error) {

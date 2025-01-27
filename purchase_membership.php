@@ -44,11 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['buy_plan'])) {
 
         // Calculate the end date based on the duration and start date
         $end_date = date('Y-m-d', strtotime("+$duration months", strtotime($start_date)));
-       
+
         // Handle file upload (payment proof)
         if (isset($_FILES["payment_proof"])) {
             $file_error = $_FILES["payment_proof"]["error"];
-            
+
             if ($file_error != UPLOAD_ERR_OK) {
                 $error_message = '';
                 switch ($file_error) {
@@ -81,20 +81,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['buy_plan'])) {
                 exit;
             } else {
                 // File upload is successful, proceed with the code
-                $target_dir = $_SERVER['DOCUMENT_ROOT'] . "/cardiocrush-master/admin/payment_proofs/";
-                $payment_proof = $target_dir . basename($_FILES["payment_proof"]["name"]);
-                
+                $target_dir = "/cardiocrush-master/admin/payment_proofs/";
+                $file_name = preg_replace("/[^a-zA-Z0-9_\.-]/", "_", basename($_FILES["payment_proof"]["name"])); // Sanitize the file name
+                $payment_proof = $target_dir . $file_name; // Relative path for the database
+
+                $full_path = $_SERVER['DOCUMENT_ROOT'] . $payment_proof; // Absolute path for moving file
+
                 // Log the target path to verify it's correct
                 error_log('Target Directory: ' . $target_dir);
                 error_log('Payment Proof Path: ' . $payment_proof);
 
-                if (move_uploaded_file($_FILES["payment_proof"]["tmp_name"], $payment_proof)) {
+                if (move_uploaded_file($_FILES["payment_proof"]["tmp_name"], $full_path)) {
                     // Insert membership record into memberships table
                     $membership_query = $conn->prepare(
                         "INSERT INTO memberships (id, plans_id, start_date, end_date, status, payment_status, payment_proof) 
-                        VALUES (?, ?, ?, ?, 'inactive', 'pending', ?)");
-                     $membership_query->bind_param("iisss", $user_id, $plan_id, $start_date, $end_date, $payment_proof);
-
+                        VALUES (?, ?, ?, ?, 'inactive', 'pending', ?)"
+                    );
+                    $membership_query->bind_param("iisss", $user_id, $plan_id, $start_date, $end_date, $payment_proof);
 
                     if ($membership_query->execute()) {
                         $membership_id = $conn->insert_id;  // Get the inserted membership ID
@@ -107,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['buy_plan'])) {
 
                         if ($payment_query->execute()) {
                             // Get the payment_id from the insert query
-                             $payment_id = $conn->insert_id;
+                            $payment_id = $conn->insert_id;
                             // Redirect to home page after successful payment submission
                             echo "<script>alert('Payment submitted successfully. Awaiting admin verification.'); window.location.href='home.php';</script>";
                         } else {
@@ -130,4 +133,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['buy_plan'])) {
         exit;
     }
 }
-?>

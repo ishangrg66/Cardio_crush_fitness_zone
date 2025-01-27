@@ -29,11 +29,10 @@ function showNewMembership() {
 }
 
 // Trainers
-function showTrainers() {
-  event.preventDefault(); // Prevent default behavior
+function showTrainers(event) {
   $.ajax({
     url: "./adminView/viewTrainers.php",
-    method: "post",
+    method: "POST",
     data: { record: 1 },
     success: function (data) {
       $(".allContent-section").html(data);
