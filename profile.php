@@ -95,9 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
     <link
         rel="stylesheet"
         href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-    <link rel="stylesheet" href="./css/Timetable.css" />
     <title>My Profile</title>
-    <!-- <link rel="stylesheet" href="styles.css"> -->
     <style>
         /* General Styles */
         body {
@@ -185,10 +183,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
 
         button[type="button"] {
             background-color: rgb(247, 29, 29);
-            color: #333;
+            color: white;
             /* border: 1px solid rgb(247, 29, 29); */
-            padding: 5px 10px;
-            font-size: 12px;
+            padding: 8px 13px;
+            font-size: 17px;
         }
 
         button[type="button"]:hover {
@@ -434,19 +432,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
         }
 
         .action-button.cancel:hover {
-            background-color: #e60000;
+            background-color: rgb(51, 161, 226);
             /* Darker red when hovered */
-        }
-
-        /* Styling for inactive membership text */
-        p {
-            font-size: 16px;
-            color: #888;
-        }
-
-        /* Style for confirmation alert */
-        form {
-            margin-top: 20px;
         }
 
         form .action-button.cancel {
@@ -575,18 +562,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
             // Birthdate Validation
             const birthdateInput = document.getElementById('birthdateInput');
             const birthdateError = document.getElementById('birthdateError');
-            const selectedDate = new Date(birthdateInput.value);
-            const today = new Date();
-            const tenYearsAgo = new Date(today.getFullYear() - 10, today.getMonth(), today.getDate());
 
-            if (selectedDate > today || selectedDate > tenYearsAgo) {
-                birthdateError.style.display = 'block';
-                return false;
-            } else {
-                birthdateError.style.display = 'none';
+            function validateBirthdate() {
+                const selectedDate = new Date(birthdateInput.value);
+                const today = new Date();
+
+                // Calculate the minimum and maximum allowed dates
+                const minDate = new Date(today.getFullYear() - 10, today.getMonth(), today.getDate()); // 10 years ago
+                const maxDate = new Date(today.getFullYear() - 100, today.getMonth(), today.getDate()); // 100 years ago
+
+                // Check if the selected date is within the valid range
+                if (selectedDate > today || selectedDate > minDate || selectedDate < maxDate) {
+                    birthdateError.textContent = 'Age must be between 10 and 100 years.';
+                    birthdateError.style.display = 'block';
+                    return false;
+                } else {
+                    birthdateError.style.display = 'none';
+                }
+
+                return true;
             }
-
-            return true;
+            // Attach the validation function to the input's change event
+            birthdateInput.addEventListener('change', validateBirthdate);
         }
 
         document.addEventListener('DOMContentLoaded', () => {

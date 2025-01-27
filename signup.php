@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,29 +8,36 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color:rgb(19,23,24);
+      background-color: rgb(19, 23, 24);
       margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     .container {
       width: 100%;
-      max-width: 400px;
-      background:hsla(240, 37%, 89%, 0.075);
+      max-width: 500px;
       padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 4px 6px  hsl(34, 30.40%, 95.50%)
     }
 
     .form-box {
+      width: 100%;
+      max-width: 450px;
+      min-width: 280px;
+      background: hsla(240, 37%, 89%, 0.075);
+      padding: 40px 20px;
       text-align: center;
+      border-radius: 10px;
+      box-shadow: -2px 2px 15px rgba(0, 0, 0, 0.5);
     }
 
     .title {
-      font-size: 28px;
+      font-size: 24px;
       margin-bottom: 10px;
       color: white;
     }
@@ -37,7 +45,7 @@
     .underline {
       width: 70px;
       height: 3px;
-      background:rgb(232, 41, 12);
+      background: green;
       margin: 0 auto 20px auto;
     }
 
@@ -48,7 +56,7 @@
 
     .input-field label {
       display: block;
-      font-size: 18px;
+      font-size: 16px;
       margin-bottom: 5px;
       color: white;
     }
@@ -56,7 +64,7 @@
     .input-field input {
       width: 100%;
       padding: 10px;
-      font-size: 16px;
+      font-size: 14px;
       border: 1px solid #ccc;
       border-radius: 4px;
       box-sizing: border-box;
@@ -65,11 +73,11 @@
     }
 
     .input-field input:focus {
-      border-color: #3498db;
+      border-color: green;
     }
 
-    .input-field span {
-      color: red;
+    .input-field span a {
+      color: green;
       font-size: 12px;
     }
 
@@ -81,7 +89,7 @@
       width: 100%;
       padding: 10px;
       font-size: 16px;
-      background: #3498db;
+      background: green;
       color: #fff;
       border: none;
       border-radius: 4px;
@@ -90,27 +98,81 @@
     }
 
     .btn-field button:hover {
-      background:rgb(238, 32, 13);
+      background: rgb(238, 32, 13);
     }
-    p span{
+
+    p span {
       color: white;
     }
 
     p span a {
-      color:rgb(238, 32, 9);
+      color: green;
       text-decoration: none;
     }
 
     p span a:hover {
       text-decoration: underline;
     }
-    .required::after{
-      content:"*";
-      color:red;
+
+    .required::after {
+      content: "*";
+      color: red;
       margin-left: 5px;
+      font-size: 20px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .form-box {
+        padding: 30px 15px;
+      }
+
+      .title {
+        font-size: 22px;
+      }
+
+      .input-field label {
+        font-size: 14px;
+      }
+
+      .input-field input {
+        font-size: 13px;
+        padding: 8px;
+      }
+
+      .btn-field button {
+        font-size: 14px;
+        padding: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .form-box {
+        padding: 20px 10px;
+      }
+
+      .title {
+        font-size: 20px;
+      }
+
+      .input-field label {
+        font-size: 13px;
+      }
+
+      .input-field input {
+        font-size: 12px;
+        padding: 6px;
+      }
+
+      .btn-field button {
+        font-size: 13px;
+        padding: 6px;
+      }
     }
   </style>
+  </style>
 </head>
+
 <body>
   <div class="container">
     <div class="form-box">
@@ -166,4 +228,5 @@
 
   <script src="./signUpscript.js"></script>
 </body>
+
 </html>
